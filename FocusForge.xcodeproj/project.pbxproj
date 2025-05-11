@@ -1,0 +1,554 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 77;
+	objects = {
+
+/* Begin PBXContainerItemProxy section */
+		63959A1F2DD09D2400B5F6E6 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 63959A052DD09D2300B5F6E6 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 63959A0C2DD09D2300B5F6E6;
+			remoteInfo = FocusForge;
+		};
+		63959A292DD09D2400B5F6E6 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 63959A052DD09D2300B5F6E6 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 63959A0C2DD09D2300B5F6E6;
+			remoteInfo = FocusForge;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		63959A0D2DD09D2300B5F6E6 /* FocusForge.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FocusForge.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		63959A1E2DD09D2400B5F6E6 /* FocusForgeTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = FocusForgeTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		63959A282DD09D2400B5F6E6 /* FocusForgeUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = FocusForgeUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+/* End PBXFileReference section */
+
+/* Begin PBXFileSystemSynchronizedRootGroup section */
+		63959A0F2DD09D2300B5F6E6 /* FocusForge */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = FocusForge;
+			sourceTree = "<group>";
+		};
+		63959A212DD09D2400B5F6E6 /* FocusForgeTests */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = FocusForgeTests;
+			sourceTree = "<group>";
+		};
+		63959A2B2DD09D2400B5F6E6 /* FocusForgeUITests */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = FocusForgeUITests;
+			sourceTree = "<group>";
+		};
+/* End PBXFileSystemSynchronizedRootGroup section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		63959A0A2DD09D2300B5F6E6 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		63959A1B2DD09D2400B5F6E6 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		63959A252DD09D2400B5F6E6 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		63959A042DD09D2300B5F6E6 = {
+			isa = PBXGroup;
+			children = (
+				63959A0F2DD09D2300B5F6E6 /* FocusForge */,
+				63959A212DD09D2400B5F6E6 /* FocusForgeTests */,
+				63959A2B2DD09D2400B5F6E6 /* FocusForgeUITests */,
+				63959A0E2DD09D2300B5F6E6 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		63959A0E2DD09D2300B5F6E6 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				63959A0D2DD09D2300B5F6E6 /* FocusForge.app */,
+				63959A1E2DD09D2400B5F6E6 /* FocusForgeTests.xctest */,
+				63959A282DD09D2400B5F6E6 /* FocusForgeUITests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		63959A0C2DD09D2300B5F6E6 /* FocusForge */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 63959A322DD09D2400B5F6E6 /* Build configuration list for PBXNativeTarget "FocusForge" */;
+			buildPhases = (
+				63959A092DD09D2300B5F6E6 /* Sources */,
+				63959A0A2DD09D2300B5F6E6 /* Frameworks */,
+				63959A0B2DD09D2300B5F6E6 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				63959A0F2DD09D2300B5F6E6 /* FocusForge */,
+			);
+			name = FocusForge;
+			packageProductDependencies = (
+			);
+			productName = FocusForge;
+			productReference = 63959A0D2DD09D2300B5F6E6 /* FocusForge.app */;
+			productType = "com.apple.product-type.application";
+		};
+		63959A1D2DD09D2400B5F6E6 /* FocusForgeTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 63959A352DD09D2400B5F6E6 /* Build configuration list for PBXNativeTarget "FocusForgeTests" */;
+			buildPhases = (
+				63959A1A2DD09D2400B5F6E6 /* Sources */,
+				63959A1B2DD09D2400B5F6E6 /* Frameworks */,
+				63959A1C2DD09D2400B5F6E6 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				63959A202DD09D2400B5F6E6 /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				63959A212DD09D2400B5F6E6 /* FocusForgeTests */,
+			);
+			name = FocusForgeTests;
+			packageProductDependencies = (
+			);
+			productName = FocusForgeTests;
+			productReference = 63959A1E2DD09D2400B5F6E6 /* FocusForgeTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		63959A272DD09D2400B5F6E6 /* FocusForgeUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 63959A382DD09D2400B5F6E6 /* Build configuration list for PBXNativeTarget "FocusForgeUITests" */;
+			buildPhases = (
+				63959A242DD09D2400B5F6E6 /* Sources */,
+				63959A252DD09D2400B5F6E6 /* Frameworks */,
+				63959A262DD09D2400B5F6E6 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				63959A2A2DD09D2400B5F6E6 /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				63959A2B2DD09D2400B5F6E6 /* FocusForgeUITests */,
+			);
+			name = FocusForgeUITests;
+			packageProductDependencies = (
+			);
+			productName = FocusForgeUITests;
+			productReference = 63959A282DD09D2400B5F6E6 /* FocusForgeUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		63959A052DD09D2300B5F6E6 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 1620;
+				LastUpgradeCheck = 1620;
+				TargetAttributes = {
+					63959A0C2DD09D2300B5F6E6 = {
+						CreatedOnToolsVersion = 16.2;
+					};
+					63959A1D2DD09D2400B5F6E6 = {
+						CreatedOnToolsVersion = 16.2;
+						TestTargetID = 63959A0C2DD09D2300B5F6E6;
+					};
+					63959A272DD09D2400B5F6E6 = {
+						CreatedOnToolsVersion = 16.2;
+						TestTargetID = 63959A0C2DD09D2300B5F6E6;
+					};
+				};
+			};
+			buildConfigurationList = 63959A082DD09D2300B5F6E6 /* Build configuration list for PBXProject "FocusForge" */;
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 63959A042DD09D2300B5F6E6;
+			minimizedProjectReferenceProxies = 1;
+			preferredProjectObjectVersion = 77;
+			productRefGroup = 63959A0E2DD09D2300B5F6E6 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				63959A0C2DD09D2300B5F6E6 /* FocusForge */,
+				63959A1D2DD09D2400B5F6E6 /* FocusForgeTests */,
+				63959A272DD09D2400B5F6E6 /* FocusForgeUITests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		63959A0B2DD09D2300B5F6E6 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		63959A1C2DD09D2400B5F6E6 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		63959A262DD09D2400B5F6E6 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		63959A092DD09D2300B5F6E6 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		63959A1A2DD09D2400B5F6E6 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		63959A242DD09D2400B5F6E6 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		63959A202DD09D2400B5F6E6 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 63959A0C2DD09D2300B5F6E6 /* FocusForge */;
+			targetProxy = 63959A1F2DD09D2400B5F6E6 /* PBXContainerItemProxy */;
+		};
+		63959A2A2DD09D2400B5F6E6 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 63959A0C2DD09D2300B5F6E6 /* FocusForge */;
+			targetProxy = 63959A292DD09D2400B5F6E6 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		63959A302DD09D2400B5F6E6 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MACOSX_DEPLOYMENT_TARGET = 15.2;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = macosx;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		63959A312DD09D2400B5F6E6 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MACOSX_DEPLOYMENT_TARGET = 15.2;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = macosx;
+				SWIFT_COMPILATION_MODE = wholemodule;
+			};
+			name = Release;
+		};
+		63959A332DD09D2400B5F6E6 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = FocusForge/FocusForge.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_ASSET_PATHS = "\"FocusForge/Preview Content\"";
+				DEVELOPMENT_TEAM = 8PCTL6TV7M;
+				ENABLE_HARDENED_RUNTIME = YES;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = dev.appsforge.FocusForge;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		63959A342DD09D2400B5F6E6 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = FocusForge/FocusForge.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_ASSET_PATHS = "\"FocusForge/Preview Content\"";
+				DEVELOPMENT_TEAM = 8PCTL6TV7M;
+				ENABLE_HARDENED_RUNTIME = YES;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = dev.appsforge.FocusForge;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
+		63959A362DD09D2400B5F6E6 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 8PCTL6TV7M;
+				GENERATE_INFOPLIST_FILE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 15.2;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = dev.appsforge.FocusForgeTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/FocusForge.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/FocusForge";
+			};
+			name = Debug;
+		};
+		63959A372DD09D2400B5F6E6 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 8PCTL6TV7M;
+				GENERATE_INFOPLIST_FILE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 15.2;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = dev.appsforge.FocusForgeTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/FocusForge.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/FocusForge";
+			};
+			name = Release;
+		};
+		63959A392DD09D2400B5F6E6 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 8PCTL6TV7M;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = dev.appsforge.FocusForgeUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TEST_TARGET_NAME = FocusForge;
+			};
+			name = Debug;
+		};
+		63959A3A2DD09D2400B5F6E6 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 8PCTL6TV7M;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = dev.appsforge.FocusForgeUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TEST_TARGET_NAME = FocusForge;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		63959A082DD09D2300B5F6E6 /* Build configuration list for PBXProject "FocusForge" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				63959A302DD09D2400B5F6E6 /* Debug */,
+				63959A312DD09D2400B5F6E6 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		63959A322DD09D2400B5F6E6 /* Build configuration list for PBXNativeTarget "FocusForge" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				63959A332DD09D2400B5F6E6 /* Debug */,
+				63959A342DD09D2400B5F6E6 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		63959A352DD09D2400B5F6E6 /* Build configuration list for PBXNativeTarget "FocusForgeTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				63959A362DD09D2400B5F6E6 /* Debug */,
+				63959A372DD09D2400B5F6E6 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		63959A382DD09D2400B5F6E6 /* Build configuration list for PBXNativeTarget "FocusForgeUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				63959A392DD09D2400B5F6E6 /* Debug */,
+				63959A3A2DD09D2400B5F6E6 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 63959A052DD09D2300B5F6E6 /* Project object */;
+}
