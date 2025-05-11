@@ -1,0 +1,52 @@
+# Xcode
+DerivedData/
+build/
+*.xcuserstate
+
+# Swift Package Manager
+.swiftpm
+.build/
+Packages/
+Package.pins
+Package.resolved
+
+# CocoaPods
+Pods/
+Podfile.lock
+
+# Carthage
+Carthage/Build/
+
+# Fastlane
+fastlane/report.xml
+fastlane/Preview.html
+fastlane/screenshots/**/*.png
+fastlane/test_output
+
+# Archives
+*.xcarchive
+
+# Xcode Automatically Generated
+*.xcworkspace
+xcuserdata/
+*.xcodeproj/project.xcworkspace/
+*.xcodeproj/xcuserdata/
+*.xcodeproj/xcshareddata/WorkspaceSettings.xcsettings
+
+# DS_Store
+.DS_Store
+
+# App Icon Templates
+Assets.xcassets/AppIcon.appiconset/Icon*.png
+
+# Temporary
+*.tmp
+*.swp
+*.lock
+
+# Logs
+*.log
+
+# User settings
+*.env
+
