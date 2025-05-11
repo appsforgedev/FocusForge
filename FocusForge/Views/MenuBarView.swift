@@ -24,6 +24,7 @@ struct MenuBarView: View {
                     Button("Start") {
                         viewModel.toggleTimer()
                     }
+                    .font(.headline)
                     .padding(5)
                 } else {
                     HStack {
