@@ -8,9 +8,12 @@
 
 import SwiftUI
 
+
 @main
 struct FocusForgeApp: App {
+    
     @NSApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
+    @StateObject private var appState = AppState()
     
     var body: some Scene {
         Settings {
