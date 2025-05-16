@@ -53,6 +53,9 @@ class TimerViewModel: ObservableObject {
 
     func start() {
         isRunning = true
+        if currentSession == .focus {
+            AudioManager.shared.play(.startFocus)
+        }
         timer = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { _ in
             self.tick()
         }
@@ -60,6 +63,7 @@ class TimerViewModel: ObservableObject {
 
     func pause() {
         isRunning = false
+        AudioManager.shared.play(.pause)
         timer?.invalidate()
     }
 
@@ -84,6 +88,7 @@ class TimerViewModel: ObservableObject {
     private func handleSessionCompletion() {
         switch currentSession {
         case .focus:
+            AudioManager.shared.play(.endFocus)
             completedFocusSessions += 1
             if completedFocusSessions % sessionsBeforeLongBreak == 0 {
                 currentSession = .longBreak

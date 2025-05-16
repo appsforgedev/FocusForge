@@ -30,4 +30,6 @@ struct AppSettings: Codable, Equatable {
     }
     
     var sessionsBeforeLongBreak: Double = 4
+    
+    var isSoundEnabled: Bool = true 
 }

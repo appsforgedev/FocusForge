@@ -10,7 +10,6 @@ import AppKit
 import Combine
 
 final class AppState: ObservableObject {
-    let settingsStore = SettingsStore()
     let timerViewModel: TimerViewModel
     let mainViewModel: MainScreenViewModel
     
@@ -18,7 +17,7 @@ final class AppState: ObservableObject {
     private var cancellables = Set<AnyCancellable>()
 
     init() {
-        self.timerViewModel = TimerViewModel(settingsStore: settingsStore)
+        self.timerViewModel = TimerViewModel(settingsStore: SettingsStore.shared)
         self.mainViewModel = MainScreenViewModel()
 
         let mainView = MainView(viewModel: mainViewModel)

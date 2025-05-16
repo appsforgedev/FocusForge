@@ -13,37 +13,42 @@ struct TimerView: View {
     
     var body: some View {
         VStack {
-            Text(viewModel.formattedTime)
-                .font(.system(size: 42, weight: .bold, design: .monospaced))
-                .frame(width: 140, alignment: .center) // фиксированная ширина
-                .animation(nil, value: viewModel.formattedTime)
+
             
             Text(viewModel.currentSession.title)
                 .font(.headline)
                 .foregroundColor(.secondary)
+                .padding(8)
             
-            FlameView(
-                isAnimating: $viewModel.isRunning,
-                currentSession: $viewModel.currentSession,
-                currentProgress: $viewModel.currentProgress
-            )
-            .padding()
+            Text(viewModel.formattedTime)
+                .font(.system(size: 42, weight: .bold, design: .monospaced))
+                .frame(width: 140, alignment: .center) // фиксированная ширина
+                .animation(nil, value: viewModel.formattedTime)
+//            FlameView(
+//                isAnimating: $viewModel.isRunning,
+//                currentSession: $viewModel.currentSession,
+//                currentProgress: $viewModel.currentProgress
+//            )
+//            .padding()
             
             if !viewModel.isRunning {
                 Button("Start") {
                     viewModel.toggleTimer()
                 }
+                .buttonStyle(AppsForgeButtonStyles.Primary())
                 
             } else {
                 HStack {
                     Button("Pause") {
                         viewModel.toggleTimer()
                     }
+                    .buttonStyle(AppsForgeButtonStyles.Primary())
                     Button("Reset") {
                         viewModel.reset()
                     }
+                    .buttonStyle(AppsForgeButtonStyles.Secondary())
                     Button("Force") {
-                        viewModel.forceHalfTimer()
+                        viewModel.forceTimer()
                     }
                 }
             }

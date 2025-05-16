@@ -13,7 +13,7 @@ struct MainView: View {
     @EnvironmentObject var appState: AppState
     
     var body: some View {
-        VStack(spacing: 12) {
+        VStack(spacing: 4) {
             switch viewModel.currentScreen {
             case .timer:
                 VStack {
@@ -23,25 +23,26 @@ struct MainView: View {
                     Button("Settings") {
                         viewModel.showSettings()
                     }
-                    .padding()
+                    .buttonStyle(AppsForgeButtonStyles.Minimal())
+                    .padding(.bottom, 8)
                 }
             case .settings:
                 VStack {
                     Spacer()
                     SettingsView(
-                        settingsStore: appState.settingsStore,
+                        settingsStore: SettingsStore.shared,
                         timerIsRunning: appState.timerViewModel.isRunning
                     )
                     Spacer()
                     Button("Back") {
                         viewModel.showTimer()
                     }
-                    .padding()
-
+                    .buttonStyle(AppsForgeButtonStyles.Minimal())
+                    .padding(.bottom, 8)
                 }
             }
         }
-        .frame(width: 280, height: 280)
+        .frame(width: 280, height: 260)
     }
 }
 
