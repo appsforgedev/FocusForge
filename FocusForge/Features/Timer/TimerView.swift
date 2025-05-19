@@ -18,18 +18,12 @@ struct TimerView: View {
             Text(viewModel.currentSession.title)
                 .font(.headline)
                 .foregroundColor(.secondary)
-                .padding(8)
+                .padding(4)
             
             Text(viewModel.formattedTime)
                 .font(.system(size: 42, weight: .bold, design: .monospaced))
                 .frame(width: 140, alignment: .center) // фиксированная ширина
                 .animation(nil, value: viewModel.formattedTime)
-//            FlameView(
-//                isAnimating: $viewModel.isRunning,
-//                currentSession: $viewModel.currentSession,
-//                currentProgress: $viewModel.currentProgress
-//            )
-//            .padding()
             
             if !viewModel.isRunning {
                 Button("Start") {

@@ -78,6 +78,9 @@ class TimerViewModel: ObservableObject {
     private func tick() {
         if timeRemaining > 0 {
             timeRemaining -= 1
+            if timeRemaining < 5 {
+                AudioManager.shared.play(.tick)
+            }
             updateDisplay()
         } else {
             pause()

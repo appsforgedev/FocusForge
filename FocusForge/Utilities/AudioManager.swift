@@ -37,7 +37,7 @@ final class AudioManager {
         case pause = "pause"
         case resume = "flame_whip"
         case reset = "metal_reset"
-        case tick = "tick_forge"
+        case tick = "tick"
         case final = "steam_release"
     }
 
