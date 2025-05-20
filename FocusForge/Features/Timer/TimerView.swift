@@ -14,11 +14,19 @@ struct TimerView: View {
     var body: some View {
         VStack {
 
-            
-            Text(viewModel.currentSession.title)
-                .font(.headline)
-                .foregroundColor(.secondary)
-                .padding(4)
+            HStack {
+                Text(viewModel.currentSession.title)
+                    .font(.headline)
+                    .foregroundColor(.secondary)
+                    .padding(.vertical, 4)
+                if let title = viewModel.nextSession?.title {
+                    Text("-> \(title)")
+                        .font(.subheadline)
+                        .foregroundColor(.gray.opacity(0.5))
+                        .padding(.vertical, 4)
+                }
+              
+            }
             
             Text(viewModel.formattedTime)
                 .font(.system(size: 42, weight: .bold, design: .monospaced))

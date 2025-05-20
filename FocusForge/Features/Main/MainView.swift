@@ -13,21 +13,20 @@ struct MainView: View {
     @EnvironmentObject var appState: AppState
     
     var body: some View {
-        VStack(spacing: 4) {
-            switch viewModel.currentScreen {
-            case .timer:
-                VStack {
-                    Spacer()
+        ZStack(alignment: .topTrailing) {
+            VStack {
+                Spacer()
+                switch viewModel.currentScreen {
+                case .timer:
                     TimerView(viewModel: appState.timerViewModel)
                     Spacer()
                     Button("Settings") {
+                        AudioManager.shared.play(.click)
                         viewModel.showSettings()
                     }
                     .buttonStyle(AppsForgeButtonStyles.Minimal())
                     .padding(.bottom, 8)
-                }
-            case .settings:
-                VStack {
+                case .settings:
                     Spacer()
                     SettingsView(
                         settingsStore: SettingsStore.shared,
@@ -35,6 +34,7 @@ struct MainView: View {
                     )
                     Spacer()
                     Button("Back") {
+                        AudioManager.shared.play(.click)
                         viewModel.showTimer()
                     }
                     .buttonStyle(AppsForgeButtonStyles.Minimal())
@@ -42,7 +42,34 @@ struct MainView: View {
                 }
             }
         }
-        .frame(width: 280, height: 260)
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .overlay(alignment: .topTrailing) {
+            switch viewModel.currentScreen {
+            case .timer:
+                VStack(spacing: 8) {
+                    Spacer()
+                    Button {
+                        SettingsStore.shared.settings.isSoundEnabled.toggle()
+                    } label: {
+                        Image(systemName: SettingsStore.shared.settings.isSoundEnabled
+                              ? "speaker.wave.2.circle"
+                              : "speaker.slash.circle")
+                        .font(.system(size: 22))
+                    }
+                    
+                    Button {
+                        AudioManager.shared.play(.click)
+                    } label: {
+                        Image(systemName: "list.bullet.circle")
+                            .font(.system(size: 22))
+                    }
+                    Spacer()
+                }
+                .padding(.trailing, 16)
+            case .settings:
+                EmptyView()
+            }
+        }
     }
 }
 

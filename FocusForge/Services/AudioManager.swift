@@ -11,9 +11,10 @@ import AVFoundation
 import Combine
 
 final class AudioManager {
+    
     static let shared = AudioManager()
     
-    @Published var isSoundEnabled: Bool = true
+    @Published var isSoundEnabled: Bool = false
 
     private var player: AVAudioPlayer?
     private var cancellable: AnyCancellable?
@@ -22,7 +23,6 @@ final class AudioManager {
         // Подпишемся на обновление из SettingsStore
         cancellable = SettingsStore.shared.$settings
             .map(\.isSoundEnabled)
-            .removeDuplicates()
             .receive(on: DispatchQueue.main)
             .assign(to: \.isSoundEnabled, on: self)
     }
@@ -38,6 +38,8 @@ final class AudioManager {
         case resume = "flame_whip"
         case reset = "metal_reset"
         case tick = "tick"
+        case hit = "hit"
+        case click = "click"
         case final = "steam_release"
     }
 

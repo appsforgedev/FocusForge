@@ -15,6 +15,7 @@ class TimerViewModel: ObservableObject {
     @Published var formattedTime: String = "25:00"
     @Published var isRunning: Bool = false
     @Published var currentSession: PomodoroSession = .focus
+    @Published var nextSession: PomodoroSession?
     @Published var currentSessionDuration: TimeInterval = 1500
     @Published var currentProgress: Double = 0
 
@@ -24,7 +25,7 @@ class TimerViewModel: ObservableObject {
     
     private var completedFocusSessions = 0
     private var sessionsBeforeLongBreak = 4
-    
+
     private var settings: AppSettings {
         settingsStore.settings
     }
@@ -53,6 +54,7 @@ class TimerViewModel: ObservableObject {
 
     func start() {
         isRunning = true
+        nextSession = getNextSession()
         if currentSession == .focus {
             AudioManager.shared.play(.startFocus)
         }
@@ -73,6 +75,20 @@ class TimerViewModel: ObservableObject {
         timeRemaining = duration(for: currentSession)
         currentSessionDuration = duration(for: currentSession)
         updateDisplay()
+    }
+    
+    func getNextSession() -> PomodoroSession {
+        switch currentSession {
+        case .focus:
+            if completedFocusSessions + 1 % sessionsBeforeLongBreak == 0 {
+                return .longBreak
+            } else {
+                return .shortBreak
+            }
+        case .longBreak, .shortBreak:
+            return .focus
+        }
+
     }
 
     private func tick() {
@@ -131,10 +147,10 @@ class TimerViewModel: ObservableObject {
         .assign(to: \.currentProgress, on: self)
         .store(in: &cancellables)
         
-        settingsStore.$settings
-            .map(\.workDurationValue)
-            .assign(to: \.timeRemaining, on: self)
-            .store(in: &cancellables)
+//        settingsStore.$settings
+//            .map(\.workDurationValue)
+//            .assign(to: \.timeRemaining, on: self)
+//            .store(in: &cancellables)
         
         settingsStore.$settings
             .map(\.workDurationValue)

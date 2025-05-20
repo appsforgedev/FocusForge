@@ -32,6 +32,7 @@ struct SettingsView: View {
                     CounterView(
                         text: "Focus:",
                         step: 5,
+                        range: 15...90,
                         count: binding(for: \.workDuration)
                     )
 //                    Slider(value: binding(for: \.shortBreakDuration), in: 5...30, step: 5) {
@@ -40,6 +41,7 @@ struct SettingsView: View {
                     CounterView(
                         text: "Short Break:",
                         step: 5,
+                        range: 5...30,
                         count: binding(for: \.shortBreakDuration)
                     )
 //                    Slider(value: binding(for: \.longBreakDuration), in: 5...60, step: 5) {
@@ -48,6 +50,7 @@ struct SettingsView: View {
                     CounterView(
                         text: "Long Break:",
                         step: 5,
+                        range: 15...60,
                         count: binding(for: \.longBreakDuration)
                     )
                     
@@ -59,6 +62,7 @@ struct SettingsView: View {
                     CounterView(
                         text: "Before long break:",
                         step: 1,
+                        range: 0...10,
                         count: binding(for: \.sessionsBeforeLongBreak)
                     )
                     ToggleView(text: "Sound ebabled:", isOn: binding(for: \.isSoundEnabled))
@@ -100,7 +104,16 @@ struct ToggleView: View {
 struct CounterView: View {
     var text: String
     var step: TimeInterval
-    @Binding var count: TimeInterval
+    var range: ClosedRange<TimeInterval>
+    @Binding var count: TimeInterval {
+        didSet {
+            plusDisabled = count + step > range.upperBound
+            minusDisabled = count - step < range.lowerBound
+        }
+    }
+    
+    @State var plusDisabled: Bool = false
+    @State var minusDisabled: Bool = false
     
     var body: some View {
         HStack {
@@ -109,12 +122,16 @@ struct CounterView: View {
             Text("\(Int(count))")
             Button("+") {
                 count += step
+                AudioManager.shared.play(.click)
             }
             .font(.subheadline)
+            .disabled(plusDisabled)
             Button("-") {
                 count -= step
+                AudioManager.shared.play(.click)
             }
             .font(.subheadline)
+            .disabled(minusDisabled)
         }
         .padding(.horizontal, 16)
         .frame(minWidth: 0, maxWidth: .infinity)
