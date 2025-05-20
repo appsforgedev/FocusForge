@@ -8,23 +8,14 @@
 
 import Foundation
 import AVFoundation
-import Combine
 
 final class AudioManager {
     
-    static let shared = AudioManager()
-    
-    @Published var isSoundEnabled: Bool = false
-
+    private let settingsStore: SettingsStore
     private var player: AVAudioPlayer?
-    private var cancellable: AnyCancellable?
     
-    private init() {
-        // Подпишемся на обновление из SettingsStore
-        cancellable = SettingsStore.shared.$settings
-            .map(\.isSoundEnabled)
-            .receive(on: DispatchQueue.main)
-            .assign(to: \.isSoundEnabled, on: self)
+    init(settingsStore: SettingsStore) {
+        self.settingsStore = settingsStore
     }
 
     enum AppSound: String {
@@ -44,7 +35,7 @@ final class AudioManager {
     }
 
     func play(_ sound: AppSound) {
-        guard isSoundEnabled else { return }
+        guard settingsStore.isSoundEnabled else { return }
         
         guard let url = Bundle.main.url(forResource: sound.rawValue, withExtension: "wav") else {
             print("🔇 Sound not found: \(sound.rawValue)")

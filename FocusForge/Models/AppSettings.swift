@@ -9,27 +9,32 @@
 import Foundation
 
 struct AppSettings: Codable, Equatable {
+    
     var workDuration: TimeInterval = 25
-    
-    var workDurationValue: TimeInterval {
-        get { workDuration * 60 }
-        set { workDuration = newValue }
-    }
     var shortBreakDuration: TimeInterval = 5
-    
-    var shortBreakDurationValue: TimeInterval {
-        get { shortBreakDuration * 60 }
-        set { shortBreakDuration = newValue }
-    }
-    
     var longBreakDuration: TimeInterval = 15
-    
-    var longBreakDurationValue: TimeInterval {
-        get { longBreakDuration * 60 }
-        set { longBreakDuration = newValue }
-    }
-    
-    var sessionsBeforeLongBreak: Double = 4
+    var sessionsBeforeLongBreak: Int = 4
     
     var isSoundEnabled: Bool = true 
+}
+
+
+extension AppSettings {
+    /// Длительность фокус-сессии в секундах.
+    var workDurationValue: TimeInterval {
+        get { workDuration * 60 }
+        set { workDuration = newValue / 60 }
+    }
+
+    /// Длительность короткого перерыва в секундах.
+    var shortBreakDurationValue: TimeInterval {
+        get { shortBreakDuration * 60 }
+        set { shortBreakDuration = newValue / 60 }
+    }
+
+    /// Длительность длинного перерыва в секундах.
+    var longBreakDurationValue: TimeInterval {
+        get { longBreakDuration * 60 }
+        set { longBreakDuration = newValue / 60 }
+    }
 }

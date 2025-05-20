@@ -9,60 +9,60 @@
 import SwiftUI
 
 struct MainView: View {
-    @ObservedObject var viewModel: MainScreenViewModel
-    @EnvironmentObject var appState: AppState
+    @Environment(AppState.self) private var appState
     
     var body: some View {
         ZStack(alignment: .topTrailing) {
             VStack {
                 Spacer()
-                switch viewModel.currentScreen {
+                switch appState.currentScreen {
                 case .timer:
-                    TimerView(viewModel: appState.timerViewModel)
+                    TimerView(timerState: appState.timerState)
                     Spacer()
                     Button("Settings") {
-                        AudioManager.shared.play(.click)
-                        viewModel.showSettings()
+                        appState.environment.audioManager.play(.click)
+                        appState.showSettings()
                     }
                     .buttonStyle(AppsForgeButtonStyles.Minimal())
                     .padding(.bottom, 8)
                 case .settings:
                     Spacer()
-                    SettingsView(
-                        settingsStore: SettingsStore.shared,
-                        timerIsRunning: appState.timerViewModel.isRunning
-                    )
+                    SettingsView(timerIsRunning: appState.timerState.isRunning)
+                        .environment(appState.environment)
                     Spacer()
                     Button("Back") {
-                        AudioManager.shared.play(.click)
-                        viewModel.showTimer()
+                        appState.environment.audioManager.play(.click)
+                        appState.showTimer()
                     }
                     .buttonStyle(AppsForgeButtonStyles.Minimal())
+                    .contentShape(Rectangle())
                     .padding(.bottom, 8)
                 }
             }
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .overlay(alignment: .topTrailing) {
-            switch viewModel.currentScreen {
+            switch appState.currentScreen {
             case .timer:
                 VStack(spacing: 8) {
                     Spacer()
                     Button {
-                        SettingsStore.shared.settings.isSoundEnabled.toggle()
+                        appState.environment.settingsStore.settings.isSoundEnabled.toggle()
                     } label: {
-                        Image(systemName: SettingsStore.shared.settings.isSoundEnabled
+                        Image(systemName: appState.environment.settingsStore.isSoundEnabled
                               ? "speaker.wave.2.circle"
                               : "speaker.slash.circle")
                         .font(.system(size: 22))
                     }
+                    .contentShape(Rectangle())
                     
                     Button {
-                        AudioManager.shared.play(.click)
+                        appState.environment.audioManager.play(.click)
                     } label: {
                         Image(systemName: "list.bullet.circle")
                             .font(.system(size: 22))
                     }
+                    .contentShape(Rectangle())
                     Spacer()
                 }
                 .padding(.trailing, 16)

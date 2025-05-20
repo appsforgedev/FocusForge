@@ -9,7 +9,7 @@
 import SwiftUI
 
 struct SettingsView: View {
-    @ObservedObject var settingsStore: SettingsStore
+    @Environment(AppEnvironment.self) private var appEnvironment
     @State var timerIsRunning: Bool
 
     var body: some View {
@@ -26,47 +26,37 @@ struct SettingsView: View {
         } else {
             Form {
                 Section(header: Text("Durations (minutes)").customHeadline()) {
-//                    Slider(value: binding(for: \.workDuration), in: 15...90, step: 5) {
-//                        Text("Focus: \(Int(settingsStore.settings.workDuration))")
-//                    }
                     CounterView(
                         text: "Focus:",
                         step: 5,
                         range: 15...90,
-                        count: binding(for: \.workDuration)
+                        count: appEnvironment.settingsStore.binding(for: \.workDuration)
                     )
-//                    Slider(value: binding(for: \.shortBreakDuration), in: 5...30, step: 5) {
-//                        Text("Short Break: \(Int(settingsStore.settings.shortBreakDuration))")
-//                    }
                     CounterView(
                         text: "Short Break:",
                         step: 5,
                         range: 5...30,
-                        count: binding(for: \.shortBreakDuration)
+                        count: appEnvironment.settingsStore.binding(for: \.shortBreakDuration)
                     )
-//                    Slider(value: binding(for: \.longBreakDuration), in: 5...60, step: 5) {
-//                        Text("Long Break: \(Int(settingsStore.settings.longBreakDuration))")
-//                    }
                     CounterView(
                         text: "Long Break:",
                         step: 5,
                         range: 15...60,
-                        count: binding(for: \.longBreakDuration)
+                        count: appEnvironment.settingsStore.binding(for: \.longBreakDuration)
                     )
                     
                 }
                 Section(header: Text("Session Settings").customHeadline()) {
-//                    Slider(value: binding(for: \.sessionsBeforeLongBreak), in: 1...10, step: 1) {
-//                        Text("Before long break: \(Int(settingsStore.settings.sessionsBeforeLongBreak))")
-//                    }
                     CounterView(
                         text: "Before long break:",
                         step: 1,
-                        range: 0...10,
-                        count: binding(for: \.sessionsBeforeLongBreak)
+                        range: 1...10,
+                        count: appEnvironment.settingsStore.binding(for: \.sessionsBeforeLongBreak)
                     )
-                    ToggleView(text: "Sound ebabled:", isOn: binding(for: \.isSoundEnabled))
-//                    Toggle("Sound ebabled", isOn: binding(for: \.isSoundEnabled))
+                    ToggleView(
+                        text: "Sound ebabled:",
+                        isOn: appEnvironment.settingsStore.binding(for: \.isSoundEnabled)
+                    )
                 }
                 
             }
@@ -75,16 +65,10 @@ struct SettingsView: View {
         }
     }
 
-    // Универсальный биндинг к AppSettings
-    private func binding<Value>(for keyPath: WritableKeyPath<AppSettings, Value>) -> Binding<Value> {
-        Binding(
-            get: { self.settingsStore.settings[keyPath: keyPath] },
-            set: { self.settingsStore.settings[keyPath: keyPath] = $0 }
-        )
-    }
 }
 
 struct ToggleView: View {
+    
     var text: String
     @Binding var isOn: Bool
     
@@ -101,40 +85,55 @@ struct ToggleView: View {
     }
 }
 
-struct CounterView: View {
+struct CounterView<T: Strideable & Comparable>: View where T.Stride: SignedNumeric & Comparable {
+    @Environment(AppEnvironment.self) private var appEnvironment
     var text: String
-    var step: TimeInterval
-    var range: ClosedRange<TimeInterval>
-    @Binding var count: TimeInterval {
-        didSet {
-            plusDisabled = count + step > range.upperBound
-            minusDisabled = count - step < range.lowerBound
-        }
-    }
+    var step: T.Stride
+    var range: ClosedRange<T>
     
-    @State var plusDisabled: Bool = false
-    @State var minusDisabled: Bool = false
+    @Binding var count: T
+    
+    @State private var plusDisabled: Bool = false
+    @State private var minusDisabled: Bool = false
     
     var body: some View {
         HStack {
             Text(text).customHeadline()
             Spacer()
-            Text("\(Int(count))")
+            Text("\(displayValue)")
             Button("+") {
-                count += step
-                AudioManager.shared.play(.click)
+                count = count.advanced(by: step)
+                appEnvironment.audioManager.play(.click)
+                updateDisabledStates()
             }
             .font(.subheadline)
             .disabled(plusDisabled)
             Button("-") {
-                count -= step
-                AudioManager.shared.play(.click)
+                count = count.advanced(by: -step)
+                appEnvironment.audioManager.play(.click)
+                updateDisabledStates()
             }
             .font(.subheadline)
             .disabled(minusDisabled)
         }
         .padding(.horizontal, 16)
         .frame(minWidth: 0, maxWidth: .infinity)
+        .onAppear {
+            updateDisabledStates()
+        }
+    }
+    
+    private var displayValue: String {
+         if let count = count as? TimeInterval {
+             return "\(Int(count))" // можно расширить форматирование
+         } else {
+             return "\(count)"
+         }
+     }
+    
+    private func updateDisabledStates() {
+        plusDisabled = count.advanced(by: step) > range.upperBound
+        minusDisabled = count.advanced(by: -step) < range.lowerBound
     }
 }
 

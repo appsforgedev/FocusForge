@@ -9,51 +9,55 @@
 import SwiftUI
 
 struct TimerView: View {
-    @ObservedObject var viewModel: TimerViewModel
+    @Bindable var timerState: TimerState
     
     var body: some View {
         VStack {
 
             HStack {
-                Text(viewModel.currentSession.title)
+                Text(timerState.currentSession.title)
                     .font(.headline)
                     .foregroundColor(.secondary)
                     .padding(.vertical, 4)
-                if let title = viewModel.nextSession?.title {
-                    Text("-> \(title)")
-                        .font(.subheadline)
-                        .foregroundColor(.gray.opacity(0.5))
-                        .padding(.vertical, 4)
-                }
+//                if let title = viewModel.nextSession?.title {
+//                    Text("-> \(title)")
+//                        .font(.subheadline)
+//                        .foregroundColor(.gray.opacity(0.5))
+//                        .padding(.vertical, 4)
+//                }
               
             }
             
-            Text(viewModel.formattedTime)
+            Text(formattedTime)
                 .font(.system(size: 42, weight: .bold, design: .monospaced))
                 .frame(width: 140, alignment: .center) // фиксированная ширина
-                .animation(nil, value: viewModel.formattedTime)
+                .animation(nil, value: formattedTime)
             
-            if !viewModel.isRunning {
+            if !timerState.isRunning {
                 Button("Start") {
-                    viewModel.toggleTimer()
+                    timerState.start()
                 }
                 .buttonStyle(AppsForgeButtonStyles.Primary())
                 
             } else {
                 HStack {
                     Button("Pause") {
-                        viewModel.toggleTimer()
+                        timerState.pause()
                     }
                     .buttonStyle(AppsForgeButtonStyles.Primary())
                     Button("Reset") {
-                        viewModel.reset()
+                        timerState.reset()
                     }
                     .buttonStyle(AppsForgeButtonStyles.Secondary())
                     Button("Force") {
-                        viewModel.forceTimer()
+                        timerState.forceTimer()
                     }
                 }
             }
         }
+    }
+    
+    private var formattedTime: String {
+        TimeFormatter.string(from: timerState.displayTime)
     }
 }
