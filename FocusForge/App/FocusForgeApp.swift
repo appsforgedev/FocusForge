@@ -13,7 +13,13 @@ import SwiftUI
 struct FocusForgeApp: App {
     
     @NSApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
-    @StateObject private var appState = AppState()
+    @State private var appState: AppState!
+    
+    private let environment = AppEnvironment.live()
+
+    init() {
+        _appState = State(wrappedValue: AppState(environment: environment))
+    }
     
     var body: some Scene {
         Settings {

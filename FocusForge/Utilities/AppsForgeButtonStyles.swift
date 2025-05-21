@@ -48,12 +48,13 @@ struct AppsForgeButtonStyles {
             configuration.label
                 .font(.footnote)
                 .foregroundColor(.secondary)
-                .frame(minWidth: 75)
+                .frame(minWidth: 75, maxWidth: 85, minHeight: 14)
                 .padding(6)
                 .background(
                     RoundedRectangle(cornerRadius: 8)
                         .stroke(Color.gray.opacity(0.4), lineWidth: 1)
                 )
+                .contentShape(Rectangle())
                 .opacity(configuration.isPressed ? 0.5 : 1.0)
         }
     }

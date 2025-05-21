@@ -44,7 +44,13 @@ class StatusBarController {
         }
     }
     
-    func updateStatus(session: PomodoroSession, time: String, progress: Double) {
+    func updateStatus(
+        session: PomodoroSession,
+        time: String,
+        progress: Double,
+        isRunning: Bool
+    ) {
+        let progress = isRunning ? progress : 1.0
         let iconName = session.iconForSession(progress: progress)
         if let baseImage = NSImage(
             systemSymbolName: iconName,
@@ -52,11 +58,12 @@ class StatusBarController {
         ) {
             let configuredImage = baseImage
                 .withSymbolConfiguration(NSImage.SymbolConfiguration(pointSize: 14, weight: .regular))
-            
-            if let button = statusItem.button {
-                button.font = NSFont.monospacedDigitSystemFont(ofSize: 12, weight: .regular)
-                button.image = configuredImage
-                button.title = "\(time)"
+            Task { @MainActor in
+                if let button = statusItem.button {
+                    button.font = NSFont.monospacedDigitSystemFont(ofSize: 12, weight: .regular)
+                    button.image = configuredImage
+                    button.title = "\(time)"
+                }
             }
         }
     }

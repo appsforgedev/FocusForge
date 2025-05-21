@@ -8,43 +8,33 @@
 
 import Foundation
 import AVFoundation
-import Combine
 
 final class AudioManager {
     
-    static let shared = AudioManager()
-    
-    @Published var isSoundEnabled: Bool = false
-
+    private let settingsStore: SettingsStore
     private var player: AVAudioPlayer?
-    private var cancellable: AnyCancellable?
     
-    private init() {
-        // Подпишемся на обновление из SettingsStore
-        cancellable = SettingsStore.shared.$settings
-            .map(\.isSoundEnabled)
-            .receive(on: DispatchQueue.main)
-            .assign(to: \.isSoundEnabled, on: self)
+    init(settingsStore: SettingsStore) {
+        self.settingsStore = settingsStore
     }
 
     enum AppSound: String {
         case startFocus = "forge_ignite"
         case endFocus = "hammer_strike"
-        case startShortBreak = "coal_crackle"
-        case endShortBreak = "anvil_ring"
+//        case startShortBreak = "bell"
+        case endShortBreak = "bell"
         case startLongBreak = "embers_fade"
-        case endLongBreak = "forge_awaken"
+        case endLongBreak = "steam_release"
         case pause = "pause"
         case resume = "flame_whip"
-        case reset = "metal_reset"
+        case reset = "reset"
         case tick = "tick"
         case hit = "hit"
-        case click = "click"
-        case final = "steam_release"
+        case click = "metal_click"
     }
 
     func play(_ sound: AppSound) {
-        guard isSoundEnabled else { return }
+        guard settingsStore.isSoundEnabled else { return }
         
         guard let url = Bundle.main.url(forResource: sound.rawValue, withExtension: "wav") else {
             print("🔇 Sound not found: \(sound.rawValue)")
