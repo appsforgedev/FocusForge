@@ -7,7 +7,6 @@
 
 import Foundation
 import AppKit
-import Combine
 
 @Observable
 final class AppState {
