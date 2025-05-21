@@ -10,6 +10,7 @@ import SwiftUI
 
 struct MainView: View {
     @Environment(AppState.self) private var appState
+    @Environment(\.openWindow) private var openWindow
     
     var body: some View {
         ZStack(alignment: .topTrailing) {
@@ -54,6 +55,7 @@ struct MainView: View {
                     
                     Button {
                         appState.env.audioManager.play(.click)
+                        appState.env.windowManager.showHistory()
                     } label: {
                         Image(systemName: "list.bullet.circle")
                             .font(.system(size: 22))

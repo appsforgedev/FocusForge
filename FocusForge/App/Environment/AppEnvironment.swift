@@ -12,13 +12,16 @@ final class AppEnvironment {
     
     let settingsStore: SettingsStore
     let audioManager: AudioManager
+    let windowManager: WindowManager
     
     init(
         settingsStore: SettingsStore = .init(),
-        audioManager: AudioManager
+        audioManager: AudioManager,
+        windowManager: WindowManager
     ) {
         self.settingsStore = settingsStore
         self.audioManager = audioManager
+        self.windowManager = windowManager
     }
 }
 
@@ -26,9 +29,11 @@ extension AppEnvironment {
     static func live() -> AppEnvironment {
         let settingsStore = SettingsStore()
         let audioManager = AudioManager(settingsStore: settingsStore)
+        let windowManager = WindowManager()
         return AppEnvironment(
             settingsStore: settingsStore,
-            audioManager: audioManager
+            audioManager: audioManager,
+            windowManager: windowManager
         )
     }
 }

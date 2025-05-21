@@ -8,6 +8,11 @@
 
 import SwiftUI
 
+enum AppWindows: String {
+    case history
+    
+    var id: String { rawValue }
+}
 
 @main
 struct FocusForgeApp: App {
