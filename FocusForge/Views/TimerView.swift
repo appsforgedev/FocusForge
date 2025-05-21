@@ -19,27 +19,38 @@ struct TimerView: View {
                     .font(.headline)
                     .foregroundColor(.secondary)
                     .padding(.vertical, 4)
-//                if let title = viewModel.nextSession?.title {
-//                    Text("-> \(title)")
-//                        .font(.subheadline)
-//                        .foregroundColor(.gray.opacity(0.5))
-//                        .padding(.vertical, 4)
-//                }
+                   
+                if let title = timerState.nextSession?.title {
+                    HStack {
+                        Text(Image(systemName: "arrow.forward.circle.dotted"))
+                            .font(.subheadline)
+                            .foregroundColor(.gray.opacity(0.7))
+                            .padding(.vertical, 4)
+                        Text("\(title)")
+                            .font(.subheadline)
+                            .foregroundColor(.gray.opacity(0.7))
+                            .padding(.vertical, 4)
+                    }
+                   
+                }
               
             }
+            .id(timerState.currentSession.title)
+            .transition(.asymmetric(insertion: .move(edge: .trailing), removal: .move(edge: .leading)))
+            .animation(.easeInOut(duration: 0.3), value: timerState.currentSession.title)
             
             Text(formattedTime)
                 .font(.system(size: 42, weight: .bold, design: .monospaced))
                 .frame(width: 140, alignment: .center) // фиксированная ширина
                 .animation(nil, value: formattedTime)
             
-            if !timerState.isRunning {
+            switch timerState.status {
+            case .idle:
                 Button("Start") {
                     timerState.start()
                 }
                 .buttonStyle(AppsForgeButtonStyles.Primary())
-                
-            } else {
+            case .running:
                 HStack {
                     Button("Pause") {
                         timerState.pause()
@@ -53,6 +64,11 @@ struct TimerView: View {
                         timerState.forceTimer()
                     }
                 }
+            case .paused(let remaining):
+                Button("Continue") {
+                    timerState.start(from: remaining)
+                }
+                .buttonStyle(AppsForgeButtonStyles.Primary())
             }
         }
     }

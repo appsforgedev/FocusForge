@@ -8,7 +8,7 @@
 
 import Foundation
 
-struct AppSettings: Codable, Equatable {
+final class AppSettings: Codable {
     
     var workDuration: TimeInterval = 25
     var shortBreakDuration: TimeInterval = 5
@@ -17,7 +17,6 @@ struct AppSettings: Codable, Equatable {
     
     var isSoundEnabled: Bool = true 
 }
-
 
 extension AppSettings {
     /// Длительность фокус-сессии в секундах.

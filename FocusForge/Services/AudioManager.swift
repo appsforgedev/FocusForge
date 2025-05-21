@@ -21,17 +21,16 @@ final class AudioManager {
     enum AppSound: String {
         case startFocus = "forge_ignite"
         case endFocus = "hammer_strike"
-        case startShortBreak = "coal_crackle"
-        case endShortBreak = "anvil_ring"
+//        case startShortBreak = "bell"
+        case endShortBreak = "bell"
         case startLongBreak = "embers_fade"
-        case endLongBreak = "forge_awaken"
+        case endLongBreak = "steam_release"
         case pause = "pause"
         case resume = "flame_whip"
-        case reset = "metal_reset"
+        case reset = "reset"
         case tick = "tick"
         case hit = "hit"
-        case click = "click"
-        case final = "steam_release"
+        case click = "metal_click"
     }
 
     func play(_ sound: AppSound) {

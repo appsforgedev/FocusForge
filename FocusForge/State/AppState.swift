@@ -17,7 +17,7 @@ final class AppState {
         case settings
     }
     
-    let environment: AppEnvironment
+    let env: AppEnvironment
     
     var timerState: TimerState
     var currentScreen: Screen = .timer
@@ -25,7 +25,7 @@ final class AppState {
     private(set) var statusBarController: StatusBarController!
 
     init(environment: AppEnvironment) {
-        self.environment = environment
+        self.env = environment
         self.timerState = .init(environment: environment)
         let mainView = MainView().environment(self)
         
@@ -47,14 +47,15 @@ final class AppState {
                 withObservationTracking {
                     let duration = timerState.duration(for: timerState.currentSession)
                     let progress = timerState.timeRemaining / max(duration, 1)
-                    let formattedTime = TimeFormatter.string(from: timerState.timeRemaining)
+                    let formattedTime = TimeFormatter.string(from: timerState.displayTime)
                     
                     // Обновляем UI на главном потоке
                     Task { @MainActor in
                         statusBarController.updateStatus(
                             session: timerState.currentSession,
                             time: formattedTime,
-                            progress: progress
+                            progress: progress,
+                            isRunning: timerState.isRunning
                         )
                     }
                 } onChange: {

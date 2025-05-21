@@ -15,17 +15,14 @@ struct SettingsView: View {
     var body: some View {
         if timerIsRunning {
             VStack {
-                Text("It is Running")
-                    .font(.title2)
+                Text("Session is running, please reset it for configure")
+                    .font(.title3)
                     .monospaced()
                     .multilineTextAlignment(.center)
-                Text("Stop timer for setup")
-                    .font(.footnote)
-                    .monospaced()
             }
         } else {
             Form {
-                Section(header: Text("Durations (minutes)").customHeadline()) {
+                Section(header: Text("Durations (minutes)").customHeadlineStyle()) {
                     CounterView(
                         text: "Focus:",
                         step: 5,
@@ -46,7 +43,7 @@ struct SettingsView: View {
                     )
                     
                 }
-                Section(header: Text("Session Settings").customHeadline()) {
+                Section(header: Text("Session Settings").customHeadlineStyle()) {
                     CounterView(
                         text: "Before long break:",
                         step: 1,
@@ -74,7 +71,7 @@ struct ToggleView: View {
     
     var body: some View {
         HStack {
-            Text(text).customHeadline()
+            Text(text).settingsStyle()
             Spacer()
             Toggle(isOn: $isOn) {
                 Text("")
@@ -98,7 +95,7 @@ struct CounterView<T: Strideable & Comparable>: View where T.Stride: SignedNumer
     
     var body: some View {
         HStack {
-            Text(text).customHeadline()
+            Text(text).settingsStyle()
             Spacer()
             Text("\(displayValue)")
             Button("+") {
@@ -139,8 +136,13 @@ struct CounterView<T: Strideable & Comparable>: View where T.Stride: SignedNumer
 
 extension Text {
     @ViewBuilder
-    public func customHeadline() -> some View {
+    public func customHeadlineStyle() -> some View {
         self.modifier(SectionHeaderStyle())
+    }
+    
+    @ViewBuilder
+    public func settingsStyle() -> some View {
+        self.modifier(SettingsStyle())
     }
 }
 
@@ -148,6 +150,15 @@ struct SectionHeaderStyle: ViewModifier {
     func body(content: Content) -> some View {
         content
             .font(.headline)
+            .foregroundColor(.secondary)
+    }
+}
+
+struct SettingsStyle: ViewModifier {
+    func body(content: Content) -> some View {
+        content
+            .font(.subheadline)
+            .fontWeight(.medium)
             .foregroundColor(.secondary)
     }
 }

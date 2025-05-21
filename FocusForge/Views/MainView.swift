@@ -14,13 +14,13 @@ struct MainView: View {
     var body: some View {
         ZStack(alignment: .topTrailing) {
             VStack {
-                Spacer()
                 switch appState.currentScreen {
                 case .timer:
+                    Spacer()
                     TimerView(timerState: appState.timerState)
                     Spacer()
                     Button("Settings") {
-                        appState.environment.audioManager.play(.click)
+                        appState.env.audioManager.play(.click)
                         appState.showSettings()
                     }
                     .buttonStyle(AppsForgeButtonStyles.Minimal())
@@ -28,10 +28,10 @@ struct MainView: View {
                 case .settings:
                     Spacer()
                     SettingsView(timerIsRunning: appState.timerState.isRunning)
-                        .environment(appState.environment)
+                        .environment(appState.env)
                     Spacer()
                     Button("Back") {
-                        appState.environment.audioManager.play(.click)
+                        appState.env.audioManager.play(.click)
                         appState.showTimer()
                     }
                     .buttonStyle(AppsForgeButtonStyles.Minimal())
@@ -46,18 +46,14 @@ struct MainView: View {
             case .timer:
                 VStack(spacing: 8) {
                     Spacer()
-                    Button {
-                        appState.environment.settingsStore.settings.isSoundEnabled.toggle()
-                    } label: {
-                        Image(systemName: appState.environment.settingsStore.isSoundEnabled
-                              ? "speaker.wave.2.circle"
-                              : "speaker.slash.circle")
-                        .font(.system(size: 22))
-                    }
-                    .contentShape(Rectangle())
+                    ToggleButton(
+                        systemImageOn: "speaker.wave.2.circle",
+                        systemImageOff: "speaker.slash.circle",
+                        isOn: appState.env.settingsStore.binding(for: \.isSoundEnabled)
+                    )
                     
                     Button {
-                        appState.environment.audioManager.play(.click)
+                        appState.env.audioManager.play(.click)
                     } label: {
                         Image(systemName: "list.bullet.circle")
                             .font(.system(size: 22))
@@ -70,6 +66,25 @@ struct MainView: View {
                 EmptyView()
             }
         }
+    }
+}
+
+struct ToggleButton: View {
+    let systemImageOn: String
+    let systemImageOff: String
+    @Binding var isOn: Bool
+
+    var body: some View {
+        Button {
+            isOn.toggle()
+        } label: {
+            Image(
+                systemName: isOn ? systemImageOn : systemImageOff
+            )
+            .foregroundStyle(isOn ? .primary : .secondary)
+            .font(.system(size: 22))
+        }
+        .contentShape(Rectangle())
     }
 }
 

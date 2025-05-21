@@ -17,13 +17,18 @@ final class TimerState {
     }
     
     private let environment: AppEnvironment
-    private var observation: Observation?
+    
+    var settings: AppSettings {
+        environment.settingsStore.settings
+    }
 
     var timeRemaining: TimeInterval = 0
     var currentSession: PomodoroSession = .focus
+    var nextSession: PomodoroSession? = nil
     var status: TimerStatus = .idle
+    
     var isRunning: Bool {
-        status == .running
+        status != .idle
     }
 
     let interval: TimeInterval = 1
@@ -45,40 +50,17 @@ final class TimerState {
 
     init(environment: AppEnvironment) {
         self.environment = environment
-        self.sessionsBeforeLongBreak = environment.settingsStore.settings.sessionsBeforeLongBreak
+        self.sessionsBeforeLongBreak = settings.sessionsBeforeLongBreak
         self.timeRemaining = duration(for: currentSession)
-        
-        observeSettings()
-    }
-    
-    private func observeSettings() {
-        
-        withObservationTracking(environment.settingsStore) { settingsStore in
-            if case .idle = status {
-                timeRemaining = duration(for: currentSession)
-            }
-            
-            sessionsBeforeLongBreak = settingsStore.settings.sessionsBeforeLongBreak
-        }
-        
-        observation = Observation {
-            let _ = settingsStore.settings.sessionsBeforeLongBreak
-            
-            // при любом изменении settings вызывается этот блок
-            if case .idle = status {
-                timeRemaining = duration(for: currentSession)
-            }
-            
-            sessionsBeforeLongBreak = settingsStore.settings.sessionsBeforeLongBreak
-        }
     }
 
     // MARK: - Timer Control
 
-    func start() {
+    func start(from initialTime: TimeInterval? = nil) {
         guard case .running = status else {
             environment.audioManager.play(.startFocus)
-            start(from: timeRemaining)
+            let initialTime = initialTime ?? duration(for: currentSession)
+            start(from: initialTime)
             return
         }
     }
@@ -87,6 +69,8 @@ final class TimerState {
         stop()
         timeRemaining = initialTime
         status = .running
+        sessionsBeforeLongBreak = settings.sessionsBeforeLongBreak
+        nextSession = getNextSession()
 
         timerTask = Task {
             while timeRemaining > 0 && !Task.isCancelled {
@@ -118,10 +102,12 @@ final class TimerState {
 
     func reset() {
         stop()
+        environment.audioManager.play(.reset)
         currentSession = .focus
         timeRemaining = duration(for: currentSession)
         status = .idle
         completedFocusSessions = 0
+        nextSession = nil
     }
 
     private func stop() {
@@ -141,22 +127,36 @@ final class TimerState {
                 ? .longBreak
                 : .shortBreak
 
-        case .shortBreak, .longBreak:
-            environment.audioManager.play(.startFocus)
+        case .shortBreak:
+            environment.audioManager.play(.endShortBreak)
+            currentSession = .focus
+        case .longBreak:
+            environment.audioManager.play(.endLongBreak)
             currentSession = .focus
         }
 
         timeRemaining = duration(for: currentSession)
         start(from: timeRemaining)
     }
+    
+    private func getNextSession() -> PomodoroSession {
+        switch currentSession {
+        case .focus:
+            return completedFocusSessions % sessionsBeforeLongBreak == 0
+                ? .shortBreak
+                : .longBreak
+        case .longBreak, .shortBreak:
+            return .focus
+        }
+    }
 
     // MARK: - Helpers
 
     func duration(for session: PomodoroSession) -> TimeInterval {
         switch session {
-        case .focus: return environment.settingsStore.settings.workDurationValue
-        case .shortBreak: return environment.settingsStore.settings.shortBreakDurationValue
-        case .longBreak: return environment.settingsStore.settings.longBreakDurationValue
+        case .focus: return settings.workDurationValue
+        case .shortBreak: return settings.shortBreakDurationValue
+        case .longBreak: return settings.longBreakDurationValue
         }
     }
 
