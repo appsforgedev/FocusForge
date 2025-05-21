@@ -6,19 +6,16 @@
 //
 
 import SwiftUI
+import SwiftData
 
 final class WindowManager {
     private var historyWindow: NSWindow?
 
-    func showHistory() {
-        
-        defer {
-            NSApp.activate(ignoringOtherApps: true)
-        }
+    func showHistory(modelContext: ModelContext) {
         
         if historyWindow == nil {
-            let historyView = HistoryView()
 
+            let historyView = HistoryView().modelContext(modelContext)
             let hosting = NSHostingController(rootView: historyView)
 
             let window = NSWindow(
@@ -32,9 +29,10 @@ final class WindowManager {
             window.center()
             window.makeKeyAndOrderFront(nil)
             self.historyWindow = window
+            NSApp.activate(ignoringOtherApps: true)
         } else {
             historyWindow?.makeKeyAndOrderFront(nil)
-        
+            NSApp.activate(ignoringOtherApps: true)
         }
     }
 }

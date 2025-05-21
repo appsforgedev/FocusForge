@@ -7,6 +7,7 @@
 
 
 import SwiftUI
+import SwiftData
 
 struct MainView: View {
     @Environment(AppState.self) private var appState
@@ -55,17 +56,34 @@ struct MainView: View {
                     
                     Button {
                         appState.env.audioManager.play(.click)
-                        appState.env.windowManager.showHistory()
+                        appState.env.windowManager.showHistory(modelContext: appState.env.modelContext)
                     } label: {
                         Image(systemName: "list.bullet.circle")
                             .font(.system(size: 22))
                     }
                     .contentShape(Rectangle())
+                    
+                    Button {
+                        do {
+//                            try appState.env.modelContext.delete(model: SessionEntity.self)
+                            for session in try appState.env.modelContext.fetch(FetchDescriptor<SessionEntity>()) {
+                                appState.env.modelContext.delete(session)
+                            }
+                            try appState.env.modelContext.save()
+                            try appState.env.modelContext.delete(model: CycleEntity.self)
+                        } catch {
+                            print("Failed to clear all Sessions data.")
+                        }
+                    } label: {
+                        Image(systemName: "trash.slash.circle")
+                            .font(.system(size: 22))
+                    }
                     Spacer()
                 }
                 .padding(.trailing, 16)
             case .settings:
                 EmptyView()
+                
             }
         }
     }

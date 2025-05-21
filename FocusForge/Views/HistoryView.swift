@@ -6,31 +6,42 @@
 //
 
 import SwiftUI
+import SwiftData
 
 struct HistoryView: View {
-    private var sessions = [
-        SessionHistory(id: UUID(), startDate: Date().addingTimeInterval(-3600), type: .focus),
-        SessionHistory(id: UUID(), startDate: Date().addingTimeInterval(-7200), type: .longBreak)
-    ]
-    
+    @Query var cycles: [CycleEntity]
+    @Query(sort: \SessionEntity.startTime, order: .reverse) var records: [SessionEntity]
+
     private var dateFormatter: DateFormatter {
-        var formatter = DateFormatter()
+        let formatter = DateFormatter()
         formatter.dateStyle = .medium
         formatter.timeStyle = .short
         return formatter
     }
 
     var body: some View {
-        List(sessions) { session in
-            VStack(alignment: .leading) {
-                Text("Тип: \(session.type)")
-                Text("Начало: \(session.startDate, formatter: dateFormatter)")
-                session.endDate.map { date in
-                    Text("Конец: \(date, formatter: dateFormatter)")
+        VStack {
+            List {
+                ForEach(cycles) { cycle in
+                    HStack {
+                        Text(cycle.startDate.formatted(date: .numeric, time: .shortened))
+                        Spacer()
+                        Text("Количество сессий: \(cycle.sessions.count)")
+                    }
                 }
-               
             }
+            List {
+                ForEach(records) { record in
+                    HStack {
+                        Text(record.type.capitalized)
+                        Spacer()
+                        Text(record.startTime.formatted(date: .abbreviated, time: .shortened))
+                        Text(record.isInterrupted ? "Interrupted" : "Full")
+                    }
+                    .padding()
+                }
+            }
+            
         }
-        .padding()
     }
 }

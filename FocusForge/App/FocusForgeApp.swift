@@ -7,12 +7,7 @@
 
 
 import SwiftUI
-
-enum AppWindows: String {
-    case history
-    
-    var id: String { rawValue }
-}
+import SwiftData
 
 @main
 struct FocusForgeApp: App {
@@ -20,9 +15,14 @@ struct FocusForgeApp: App {
     @NSApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
     @State private var appState: AppState!
     
-    private let environment = AppEnvironment.live()
+    private let environment: AppEnvironment
+    private let modelContainer: ModelContainer
 
     init() {
+        let schema = Schema([SessionEntity.self, CycleEntity.self])
+        let config = ModelConfiguration("FocusForge", schema: schema)
+        self.modelContainer = try! ModelContainer(for: schema, configurations: [config])
+        self.environment = AppEnvironment.live(context: modelContainer.mainContext)
         _appState = State(wrappedValue: AppState(environment: environment))
     }
     

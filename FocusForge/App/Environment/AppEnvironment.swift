@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import SwiftData
 
 @Observable
 final class AppEnvironment {
@@ -13,27 +14,31 @@ final class AppEnvironment {
     let settingsStore: SettingsStore
     let audioManager: AudioManager
     let windowManager: WindowManager
+    let modelContext: ModelContext
     
     init(
         settingsStore: SettingsStore = .init(),
         audioManager: AudioManager,
-        windowManager: WindowManager
+        windowManager: WindowManager,
+        modelContext: ModelContext
     ) {
         self.settingsStore = settingsStore
         self.audioManager = audioManager
         self.windowManager = windowManager
+        self.modelContext = modelContext
     }
 }
 
 extension AppEnvironment {
-    static func live() -> AppEnvironment {
+    static func live(context: ModelContext) -> AppEnvironment {
         let settingsStore = SettingsStore()
         let audioManager = AudioManager(settingsStore: settingsStore)
         let windowManager = WindowManager()
-        return AppEnvironment(
+        return .init(
             settingsStore: settingsStore,
             audioManager: audioManager,
-            windowManager: windowManager
+            windowManager: windowManager,
+            modelContext: context
         )
     }
 }

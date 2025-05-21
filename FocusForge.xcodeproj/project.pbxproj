@@ -29,22 +29,9 @@
 		63959A282DD09D2400B5F6E6 /* FocusForgeUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = FocusForgeUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
-/* Begin PBXFileSystemSynchronizedGroupBuildPhaseMembershipExceptionSet section */
-		635D887F2DDDD8FF0004B9A3 /* Exceptions for "FocusForge" folder in "Copy Bundle Resources" phase from "FocusForge" target */ = {
-			isa = PBXFileSystemSynchronizedGroupBuildPhaseMembershipExceptionSet;
-			buildPhase = 63959A0B2DD09D2300B5F6E6 /* Resources */;
-			membershipExceptions = (
-				Models/SessionHistory.swift,
-			);
-		};
-/* End PBXFileSystemSynchronizedGroupBuildPhaseMembershipExceptionSet section */
-
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		63959A0F2DD09D2300B5F6E6 /* FocusForge */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
-			exceptions = (
-				635D887F2DDDD8FF0004B9A3 /* Exceptions for "FocusForge" folder in "Copy Bundle Resources" phase from "FocusForge" target */,
-			);
 			path = FocusForge;
 			sourceTree = "<group>";
 		};
