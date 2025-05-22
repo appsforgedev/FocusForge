@@ -52,7 +52,7 @@ struct AppsForgeButtonStyles {
                 .padding(6)
                 .background(
                     RoundedRectangle(cornerRadius: 8)
-                        .stroke(Color.gray.opacity(0.4), lineWidth: 1)
+                        .stroke(Color.gray.opacity(0.7), lineWidth: 1)
                 )
                 .contentShape(Rectangle())
                 .opacity(configuration.isPressed ? 0.5 : 1.0)

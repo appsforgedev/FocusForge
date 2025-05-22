@@ -14,6 +14,14 @@ final class CycleEntity {
     var startDate: Date
     var endDate: Date?
     var sessions: [SessionEntity] = []
+    
+    var sortedSessions: [SessionEntity] {
+        sessions.sorted { $0.startTime < $1.startTime }
+    }
+    
+    var isFull: Bool {
+        sessions.contains { $0.type == "longBreak" }
+    }
 
     init(startDate: Date = .now) {
         self.id = UUID()

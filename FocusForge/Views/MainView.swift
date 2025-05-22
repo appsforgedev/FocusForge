@@ -56,7 +56,9 @@ struct MainView: View {
                     
                     Button {
                         appState.env.audioManager.play(.click)
-                        appState.env.windowManager.showHistory(modelContext: appState.env.modelContext)
+                        appState.env.windowManager.showHistory(
+                            modelContext: appState.env.context
+                        )
                     } label: {
                         Image(systemName: "list.bullet.circle")
                             .font(.system(size: 22))
@@ -64,16 +66,7 @@ struct MainView: View {
                     .contentShape(Rectangle())
                     
                     Button {
-                        do {
-//                            try appState.env.modelContext.delete(model: SessionEntity.self)
-                            for session in try appState.env.modelContext.fetch(FetchDescriptor<SessionEntity>()) {
-                                appState.env.modelContext.delete(session)
-                            }
-                            try appState.env.modelContext.save()
-                            try appState.env.modelContext.delete(model: CycleEntity.self)
-                        } catch {
-                            print("Failed to clear all Sessions data.")
-                        }
+                        appState.env.dataManager.clearDataBase()
                     } label: {
                         Image(systemName: "trash.slash.circle")
                             .font(.system(size: 22))

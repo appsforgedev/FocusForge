@@ -27,7 +27,6 @@ final class TimerState {
     var nextSession: PomodoroSession? = nil
     var status: TimerStatus = .idle
     
-    var activeCycle: CycleEntity?
     private var sessionStartDate: Date?
     
     var isRunning: Bool {
@@ -127,17 +126,12 @@ final class TimerState {
             print("⚠️ Нет времени начала сессии")
             return
         }
-        recordSession(
-                type: currentSession,
-                start: sessionStartDate,
-                end: Date()
+        environment.dataManager.recordSession(
+            type: currentSession,
+            start: sessionStartDate,
+            end: Date()
         )
         self.sessionStartDate = nil
-        
-        if currentSession == .longBreak {
-            finishCycle()
-        }
-        
         
         switch currentSession {
         case .focus:
@@ -154,6 +148,7 @@ final class TimerState {
         case .longBreak:
             environment.audioManager.play(.endLongBreak)
             currentSession = .focus
+            environment.dataManager.finishCurrentCycle()
         }
 
         timeRemaining = duration(for: currentSession)
@@ -163,23 +158,23 @@ final class TimerState {
     
     func interruptSession() {
         guard let sessionStartDate else { return }
-
-        recordSession(
+        
+        environment.dataManager.recordSession(
             type: currentSession,
             start: sessionStartDate,
             end: Date(),
             interrupted: true
         )
-
+        
         self.sessionStartDate = nil
     }
     
     private func getNextSession() -> PomodoroSession {
         switch currentSession {
         case .focus:
-            return completedFocusSessions % sessionsBeforeLongBreak == 0
-                ? .shortBreak
-                : .longBreak
+            return (completedFocusSessions > 0 && completedFocusSessions % sessionsBeforeLongBreak == 0)
+                ? .longBreak
+                : .shortBreak
         case .longBreak, .shortBreak:
             return .focus
         }
@@ -197,39 +192,5 @@ final class TimerState {
 
     func forceTimer() {
         timeRemaining = duration(for: currentSession) - (duration(for: currentSession) - 5)
-    }
-}
-
-extension TimerState {
-    func recordSession(
-        type: PomodoroSession,
-        start: Date,
-        end: Date,
-        interrupted: Bool = false
-    ) {
-        let context = environment.modelContext
-
-        // Если активного цикла нет, создаем
-        if activeCycle == nil {
-            activeCycle = CycleEntity(startDate: start)
-            context.insert(activeCycle!)
-        }
-
-        let session = SessionEntity(
-            type: type.rawValue,
-            startTime: start,
-            endTime: end,
-            isInterrupted: interrupted,
-            cycle: activeCycle
-        )
-        
-        activeCycle?.sessions.append(session)
-        context.insert(session)
-    }
-    
-
-    func finishCycle() {
-        activeCycle?.endDate = Date()
-        activeCycle = nil
     }
 }

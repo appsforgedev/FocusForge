@@ -14,18 +14,18 @@ final class AppEnvironment {
     let settingsStore: SettingsStore
     let audioManager: AudioManager
     let windowManager: WindowManager
-    let modelContext: ModelContext
+    let dataManager: DataManager
     
     init(
         settingsStore: SettingsStore = .init(),
         audioManager: AudioManager,
         windowManager: WindowManager,
-        modelContext: ModelContext
+        dataManager: DataManager
     ) {
         self.settingsStore = settingsStore
         self.audioManager = audioManager
         self.windowManager = windowManager
-        self.modelContext = modelContext
+        self.dataManager = dataManager
     }
 }
 
@@ -34,11 +34,19 @@ extension AppEnvironment {
         let settingsStore = SettingsStore()
         let audioManager = AudioManager(settingsStore: settingsStore)
         let windowManager = WindowManager()
+        let dataManager = DataManager(modelContext: context)
         return .init(
             settingsStore: settingsStore,
             audioManager: audioManager,
             windowManager: windowManager,
-            modelContext: context
+            dataManager: dataManager
         )
     }
+}
+
+extension AppEnvironment {
+    var context: ModelContext { dataManager.modelContext }
+    var settings: SettingsStore { settingsStore }
+    var sound: AudioManager { audioManager }
+    var windows: WindowManager { windowManager }
 }
