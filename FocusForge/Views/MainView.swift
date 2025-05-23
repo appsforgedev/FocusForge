@@ -7,9 +7,11 @@
 
 
 import SwiftUI
+import SwiftData
 
 struct MainView: View {
     @Environment(AppState.self) private var appState
+    @Environment(\.openWindow) private var openWindow
     
     var body: some View {
         ZStack(alignment: .topTrailing) {
@@ -54,16 +56,27 @@ struct MainView: View {
                     
                     Button {
                         appState.env.audioManager.play(.click)
+                        appState.env.windowManager.showHistory(
+                            modelContext: appState.env.context
+                        )
                     } label: {
                         Image(systemName: "list.bullet.circle")
                             .font(.system(size: 22))
                     }
                     .contentShape(Rectangle())
+                    
+                    Button {
+                        appState.env.dataManager.clearDataBase()
+                    } label: {
+                        Image(systemName: "trash.slash.circle")
+                            .font(.system(size: 22))
+                    }
                     Spacer()
                 }
                 .padding(.trailing, 16)
             case .settings:
                 EmptyView()
+                
             }
         }
     }

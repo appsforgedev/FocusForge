@@ -27,6 +27,8 @@ final class TimerState {
     var nextSession: PomodoroSession? = nil
     var status: TimerStatus = .idle
     
+    private var sessionStartDate: Date?
+    
     var isRunning: Bool {
         status != .idle
     }
@@ -58,6 +60,7 @@ final class TimerState {
 
     func start(from initialTime: TimeInterval? = nil) {
         guard case .running = status else {
+            sessionStartDate = Date()
             environment.audioManager.play(.startFocus)
             let initialTime = initialTime ?? duration(for: currentSession)
             start(from: initialTime)
@@ -103,6 +106,7 @@ final class TimerState {
     func reset() {
         stop()
         environment.audioManager.play(.reset)
+        interruptSession()
         currentSession = .focus
         timeRemaining = duration(for: currentSession)
         status = .idle
@@ -118,6 +122,17 @@ final class TimerState {
     // MARK: - Session Completion
 
     private func handleSessionCompletion() {
+        guard let sessionStartDate else {
+            print("⚠️ Нет времени начала сессии")
+            return
+        }
+        environment.dataManager.recordSession(
+            type: currentSession,
+            start: sessionStartDate,
+            end: Date()
+        )
+        self.sessionStartDate = nil
+        
         switch currentSession {
         case .focus:
             environment.audioManager.play(.endFocus)
@@ -133,18 +148,33 @@ final class TimerState {
         case .longBreak:
             environment.audioManager.play(.endLongBreak)
             currentSession = .focus
+            environment.dataManager.finishCurrentCycle()
         }
 
         timeRemaining = duration(for: currentSession)
+        self.sessionStartDate = Date()
         start(from: timeRemaining)
+    }
+    
+    func interruptSession() {
+        guard let sessionStartDate else { return }
+        
+        environment.dataManager.recordSession(
+            type: currentSession,
+            start: sessionStartDate,
+            end: Date(),
+            interrupted: true
+        )
+        
+        self.sessionStartDate = nil
     }
     
     private func getNextSession() -> PomodoroSession {
         switch currentSession {
         case .focus:
-            return completedFocusSessions % sessionsBeforeLongBreak == 0
-                ? .shortBreak
-                : .longBreak
+            return (completedFocusSessions > 0 && completedFocusSessions % sessionsBeforeLongBreak == 0)
+                ? .longBreak
+                : .shortBreak
         case .longBreak, .shortBreak:
             return .focus
         }
