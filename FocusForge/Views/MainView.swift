@@ -43,6 +43,7 @@ struct MainView: View {
             }
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .background(Color.backround)
         .overlay(alignment: .topTrailing) {
             switch appState.currentScreen {
             case .timer:
@@ -62,7 +63,9 @@ struct MainView: View {
                     } label: {
                         Image(systemName: "list.bullet.circle")
                             .font(.system(size: 22))
+                            .foregroundStyle(Color.textPrimary)
                     }
+                    .buttonStyle(.plain)
                     .contentShape(Rectangle())
                     
                     Button {
@@ -70,7 +73,10 @@ struct MainView: View {
                     } label: {
                         Image(systemName: "trash.slash.circle")
                             .font(.system(size: 22))
+                            .foregroundStyle(Color.textPrimary)
+                            
                     }
+                    .buttonStyle(.plain)
                     Spacer()
                 }
                 .padding(.trailing, 16)
@@ -94,9 +100,10 @@ struct ToggleButton: View {
             Image(
                 systemName: isOn ? systemImageOn : systemImageOff
             )
-            .foregroundStyle(isOn ? .primary : .secondary)
+            .foregroundStyle(isOn ? Color.textPrimary : .textSecondary)
             .font(.system(size: 22))
         }
+        .buttonStyle(.plain)
         .contentShape(Rectangle())
     }
 }

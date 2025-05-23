@@ -14,7 +14,7 @@ struct AppsForgeButtonStyles {
         func makeBody(configuration: Configuration) -> some View {
             configuration.label
                 .font(.headline)
-                .foregroundColor(.white)
+                .foregroundColor(Color.textPrimary)
                 .padding(.horizontal, 24)
                 .padding(.vertical, 10)
                 .background(
@@ -30,7 +30,7 @@ struct AppsForgeButtonStyles {
         func makeBody(configuration: Configuration) -> some View {
             configuration.label
                 .font(.headline)
-                .foregroundColor(.gray)
+                .foregroundColor(.textSecondary)
                 .padding(.horizontal, 24)
                 .padding(.vertical, 10)
                 .background(
@@ -47,7 +47,7 @@ struct AppsForgeButtonStyles {
         func makeBody(configuration: Configuration) -> some View {
             configuration.label
                 .font(.footnote)
-                .foregroundColor(.secondary)
+                .foregroundColor(Color.textSecondary)
                 .frame(minWidth: 75, maxWidth: 85, minHeight: 14)
                 .padding(6)
                 .background(
