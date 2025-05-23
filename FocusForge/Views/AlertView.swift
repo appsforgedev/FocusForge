@@ -28,10 +28,13 @@ public struct AlertView: View {
                 onConfirm?()
             }
             .keyboardShortcut(.defaultAction)
-            Button("Cancel") {
-                onCancel?()
+            if let onCancel {
+                Button("Cancel") {
+                    onCancel()
+                }
+                .keyboardShortcut(.cancelAction)
             }
-            .keyboardShortcut(.cancelAction)
+            
         }
         .padding()
         .frame(width: 300, height: 250)
