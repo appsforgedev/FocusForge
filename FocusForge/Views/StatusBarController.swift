@@ -12,38 +12,58 @@ import SwiftUI
 
 class StatusBarController {
     private var statusItem: NSStatusItem
-    private var popover: NSPopover
+    private var mainWindow: NSWindow?
 
-    init(mainView: some View) {
-        popover = NSPopover()
-        popover.contentSize = NSSize(width: 280, height: 280)
-        popover.behavior = .transient
-        popover.contentViewController = NSHostingController(rootView: mainView)
+    init(mainView: any View) {
+        let hostingController = NSHostingController(rootView: AnyView(mainView))
+
+        let window = NSWindow(
+            contentRect: NSRect(x: 0, y: 0, width: 280, height: 280),
+            styleMask: [.borderless],
+            backing: .buffered,
+            defer: false
+        )
+        window.isOpaque = false
+        window.backgroundColor = .clear
+        window.hasShadow = true
+        window.level = .floating
+        window.contentView = hostingController.view
+        window.isReleasedWhenClosed = false
+        window.collectionBehavior = [.transient]
+        
+        self.mainWindow = window
 
         statusItem = NSStatusBar.system.statusItem(withLength: 70)
-
+        
         if let button = statusItem.button {
             button.image = NSImage(systemSymbolName: "flame.fill", accessibilityDescription: "FocusForge")?
                 .withSymbolConfiguration(NSImage.SymbolConfiguration(pointSize: 14, weight: .regular))
-            button.action = #selector(togglePopover(_:))
+            button.action = #selector(toggleWindow(_:))
             button.imagePosition = .imageLeading
             button.title = "00:00"
             button.target = self
         }
-        
     }
-    
 
-    @objc private func togglePopover(_ sender: AnyObject?) {
-        if let button = statusItem.button {
-            if popover.isShown {
-                popover.performClose(sender)
-            } else {
-                popover.show(relativeTo: button.bounds, of: button, preferredEdge: .minY)
+    @objc private func toggleWindow(_ sender: AnyObject?) {
+        guard let window = mainWindow, let button = statusItem.button else { return }
+
+        if window.isVisible {
+            window.orderOut(nil)
+        } else {
+            guard button.window?.screen != nil
+            else {
+                return
             }
+            let buttonFrame = button.window!.convertToScreen(button.frame)
+            let x = buttonFrame.origin.x + button.frame.width / 2 - 280 / 2
+            let y = buttonFrame.origin.y - 280
+            window.setFrameOrigin(NSPoint(x: x, y: y))
+            window.makeKeyAndOrderFront(nil)
+            NSApp.activate(ignoringOtherApps: true)
         }
     }
-    
+
     func updateStatus(
         session: PomodoroSession,
         time: String,
@@ -68,3 +88,4 @@ class StatusBarController {
         }
     }
 }
+

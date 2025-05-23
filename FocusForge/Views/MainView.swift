@@ -43,6 +43,11 @@ struct MainView: View {
             }
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .background(
+            RoundedRectangle(cornerRadius: 24)
+                .fill(Color(NSColor.windowBackgroundColor))
+                .shadow(color: .black.opacity(0.45), radius: 5, x: 5, y: 5)
+        )
         .overlay(alignment: .topTrailing) {
             switch appState.currentScreen {
             case .timer:
@@ -56,16 +61,21 @@ struct MainView: View {
                     
                     Button {
                         appState.env.audioManager.play(.click)
-                        appState.env.windowManager.showHistory(
-                            modelContext: appState.env.context
-                        )
+                        appState.env.windowManager.toggleHistory()
                     } label: {
                         Image(systemName: "h.square")
                             .font(.system(size: 28))
                     }
                     
                     Button {
-                        appState.terminateApplication()
+                        appState.env.windowManager.showAlert(
+                            message: "Exit?",
+                            buttonTitle: "Ok",
+                            onConfirm: {
+                                appState.terminateApplication()
+                            }) {
+                                print("On cancel")
+                            }
                     } label: {
                         Image(systemName: "xmark.square")
                             .font(.system(size: 28))
@@ -93,9 +103,9 @@ struct MainView: View {
                 .padding(.trailing, 16)
             case .settings:
                 EmptyView()
-                
             }
         }
+        .clipShape(RoundedRectangle(cornerRadius: 24))
     }
 }
 
