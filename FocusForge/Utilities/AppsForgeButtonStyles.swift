@@ -31,14 +31,14 @@ struct AppsForgeButtonStyles {
             configuration.label
                 .font(.headline)
                 .foregroundColor(.gray)
-                .padding(.horizontal, 24)
-                .padding(.vertical, 10)
+                .padding(.horizontal, 16)
+                .padding(.vertical, 6)
                 .background(
-                    RoundedRectangle(cornerRadius: 10)
+                    RoundedRectangle(cornerRadius: 6)
                         .stroke(Color.gray.opacity(0.4), lineWidth: 1)
                 )
                 .background(Color(NSColor.controlBackgroundColor))
-                .cornerRadius(12)
+                .cornerRadius(6)
                 .opacity(configuration.isPressed ? 0.8 : 1.0)
         }
     }

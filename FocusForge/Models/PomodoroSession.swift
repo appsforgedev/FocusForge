@@ -8,7 +8,10 @@
 
 
 enum PomodoroSession: String, CaseIterable, Identifiable {
-    case focus, shortBreak, longBreak
+    
+    case focus
+    case shortBreak
+    case longBreak
     
     var id: String { rawValue }
 

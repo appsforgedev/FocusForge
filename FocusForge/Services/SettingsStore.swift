@@ -24,6 +24,10 @@ final class SettingsStore {
     var isSoundEnabled: Bool {
         settings.isSoundEnabled
     }
+    
+    var isLongBreakFinish: Bool {
+        settings.isLongBreakFinish
+    }
 
     init(defaults: UserDefaults = .standard) {
         self.defaults = defaults

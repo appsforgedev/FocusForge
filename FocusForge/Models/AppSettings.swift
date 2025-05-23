@@ -15,7 +15,8 @@ final class AppSettings: Codable {
     var longBreakDuration: TimeInterval = 15
     var sessionsBeforeLongBreak: Int = 4
     
-    var isSoundEnabled: Bool = true 
+    var isSoundEnabled: Bool = true
+    var isLongBreakFinish: Bool = false
 }
 
 extension AppSettings {

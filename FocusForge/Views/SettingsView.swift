@@ -54,6 +54,10 @@ struct SettingsView: View {
                         text: "Sound ebabled:",
                         isOn: appEnvironment.settingsStore.binding(for: \.isSoundEnabled)
                     )
+                    ToggleView(
+                        text: "Long break is finish cycle:",
+                        isOn: appEnvironment.settingsStore.binding(for: \.isLongBreakFinish)
+                    )
                 }
                 
             }

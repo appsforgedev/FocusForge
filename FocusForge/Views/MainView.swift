@@ -65,17 +65,28 @@ struct MainView: View {
                     }
                     
                     Button {
-                        appState.env.dataManager.clearDataBase()
-                    } label: {
-                        Image(systemName: "trash.slash.square")
-                            .font(.system(size: 28))
-                    }
-                    Button {
                         appState.terminateApplication()
                     } label: {
                         Image(systemName: "xmark.square")
                             .font(.system(size: 28))
                     }
+                    #if DEBUG
+                    Group {
+                        Button {
+                            appState.timerState.forceTimer()
+                        } label: {
+                            Image(systemName: "arrow.clockwise.square")
+                                .font(.system(size: 28))
+                        }
+                        Button {
+                            appState.env.dataManager.clearDataBase()
+                        } label: {
+                            Image(systemName: "trash.slash.square")
+                                .font(.system(size: 28))
+                        }
+                    }
+                    .background(.brown)
+                    #endif
                     Spacer()
                 }
                 .buttonStyle(.plain)
