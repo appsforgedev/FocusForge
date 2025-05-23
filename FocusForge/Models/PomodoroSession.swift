@@ -7,8 +7,10 @@
 
 
 
-enum PomodoroSession: String {
+enum PomodoroSession: String, CaseIterable, Identifiable {
     case focus, shortBreak, longBreak
+    
+    var id: String { rawValue }
 
     var title: String {
         switch self {
@@ -16,6 +18,10 @@ enum PomodoroSession: String {
         case .shortBreak: return "Short Break"
         case .longBreak: return "Long Break"
         }
+    }
+    
+    var sybmol: String {
+        self.rawValue.first?.lowercased() ?? "?"
     }
 }
 

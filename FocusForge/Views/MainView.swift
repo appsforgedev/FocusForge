@@ -49,8 +49,8 @@ struct MainView: View {
                 VStack(spacing: 8) {
                     Spacer()
                     ToggleButton(
-                        systemImageOn: "speaker.wave.2.circle",
-                        systemImageOff: "speaker.slash.circle",
+                        systemImageOn: "speaker.square",
+                        systemImageOff: "speaker.square.fill",
                         isOn: appState.env.settingsStore.binding(for: \.isSoundEnabled)
                     )
                     
@@ -60,19 +60,25 @@ struct MainView: View {
                             modelContext: appState.env.context
                         )
                     } label: {
-                        Image(systemName: "list.bullet.circle")
-                            .font(.system(size: 22))
+                        Image(systemName: "h.square")
+                            .font(.system(size: 28))
                     }
-                    .contentShape(Rectangle())
                     
                     Button {
                         appState.env.dataManager.clearDataBase()
                     } label: {
-                        Image(systemName: "trash.slash.circle")
-                            .font(.system(size: 22))
+                        Image(systemName: "trash.slash.square")
+                            .font(.system(size: 28))
+                    }
+                    Button {
+                        appState.terminateApplication()
+                    } label: {
+                        Image(systemName: "xmark.square")
+                            .font(.system(size: 28))
                     }
                     Spacer()
                 }
+                .buttonStyle(.plain)
                 .padding(.trailing, 16)
             case .settings:
                 EmptyView()
@@ -95,7 +101,7 @@ struct ToggleButton: View {
                 systemName: isOn ? systemImageOn : systemImageOff
             )
             .foregroundStyle(isOn ? .primary : .secondary)
-            .font(.system(size: 22))
+            .font(.system(size: 28))
         }
         .contentShape(Rectangle())
     }
