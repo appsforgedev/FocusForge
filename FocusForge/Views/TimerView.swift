@@ -17,7 +17,7 @@ struct TimerView: View {
             HStack {
                 Text(timerState.currentSession.title)
                     .font(.headline)
-                    .foregroundColor(.secondary)
+                    .foregroundColor(Color.textPrimary)
                     .padding(.vertical, 4)
                    
                 if let title = timerState.nextSessionTitle {
@@ -40,6 +40,7 @@ struct TimerView: View {
             .animation(.easeInOut(duration: 0.3), value: timerState.currentSession.title)
             
             Text(formattedTime)
+                .foregroundStyle(Color.textPrimary)
                 .font(.system(size: 42, weight: .bold, design: .monospaced))
                 .frame(width: 140, alignment: .center) // фиксированная ширина
                 .animation(nil, value: formattedTime)
@@ -53,7 +54,7 @@ struct TimerView: View {
                                 timerState.start()
                             }
                         }
-                        .buttonStyle(AppsForgeButtonStyles.Primary())
+                        .buttonStyle(ForgeButtonStyles.Primary())
                         .transition(.opacity)
                     }
                 case .running:
@@ -63,13 +64,13 @@ struct TimerView: View {
                                 timerState.pause()
                             }
                         }
-                        .buttonStyle(AppsForgeButtonStyles.Primary())
+                        .buttonStyle(ForgeButtonStyles.Primary())
                         Button("Reset") {
                             withAnimation {
                                 timerState.finalize()
                             }
                         }
-                        .buttonStyle(AppsForgeButtonStyles.Secondary())
+                        .buttonStyle(ForgeButtonStyles.Secondary())
                     }
                     .transition(.opacity)
                 case .paused(let remaining):
@@ -79,7 +80,7 @@ struct TimerView: View {
                             timerState.start(from: remaining)
                         }
                     }
-                    .buttonStyle(AppsForgeButtonStyles.Primary())
+                    .buttonStyle(ForgeButtonStyles.Primary())
                     .transition(.opacity)
                 }
             }

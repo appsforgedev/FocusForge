@@ -57,11 +57,9 @@ final class AppState {
                             isRunning: timerState.isRunning
                         )
                     }
-                } onChange: {
-                    // Перезапускаем цикл при изменении наблюдаемых свойств (если нужно)
-                }
+                } onChange: { }
                 
-                try? await Task.sleep(nanoseconds: 300_000_000) // 0.3 секунды
+                try? await Task.sleep(nanoseconds: 100_000_000) // 0.1 секунды
             }
         }
     }

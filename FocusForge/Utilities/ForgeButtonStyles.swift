@@ -8,19 +8,23 @@
 
 import SwiftUI
 
-struct AppsForgeButtonStyles {
+struct ForgeButtonStyles {
     
     struct Primary: ButtonStyle {
         func makeBody(configuration: Configuration) -> some View {
             configuration.label
                 .font(.headline)
-                .foregroundColor(.white)
+                .foregroundColor(Color.buttonPrimaryText)
                 .padding(.horizontal, 24)
                 .padding(.vertical, 10)
                 .background(
-                    LinearGradient(colors: [Color.orange, Color.red], startPoint: .topLeading, endPoint: .bottomTrailing)
+                    RoundedRectangle(cornerRadius: 6)
+                        .fill(Color.buttonPrimaryBackground)
+                        .overlay(
+                            RoundedRectangle(cornerRadius: 6)
+                                .stroke(.buttonPrimaryText.opacity(0.6), lineWidth: 1)
+                        )
                 )
-                .cornerRadius(12)
                 .scaleEffect(configuration.isPressed ? 0.95 : 1.0)
                 .shadow(color: .black.opacity(0.2), radius: 4, x: 0, y: 2)
         }
@@ -30,14 +34,17 @@ struct AppsForgeButtonStyles {
         func makeBody(configuration: Configuration) -> some View {
             configuration.label
                 .font(.headline)
-                .foregroundColor(.gray)
+                .foregroundColor(.textPrimary)
                 .padding(.horizontal, 16)
                 .padding(.vertical, 6)
                 .background(
                     RoundedRectangle(cornerRadius: 6)
-                        .stroke(Color.gray.opacity(0.4), lineWidth: 1)
+                        .fill(Color.buttonSecondary)
+                        .overlay(
+                            RoundedRectangle(cornerRadius: 6)
+                                .stroke(.black.opacity(0.8), lineWidth: 1)
+                        )
                 )
-                .background(Color(NSColor.controlBackgroundColor))
                 .cornerRadius(6)
                 .opacity(configuration.isPressed ? 0.8 : 1.0)
         }
@@ -47,12 +54,12 @@ struct AppsForgeButtonStyles {
         func makeBody(configuration: Configuration) -> some View {
             configuration.label
                 .font(.footnote)
-                .foregroundColor(.secondary)
+                .foregroundColor(Color.textPrimary)
                 .frame(minWidth: 75, maxWidth: 85, minHeight: 14)
                 .padding(6)
                 .background(
-                    RoundedRectangle(cornerRadius: 8)
-                        .stroke(Color.gray.opacity(0.7), lineWidth: 1)
+                    RoundedRectangle(cornerRadius: 6)
+                        .stroke(.buttonSecondary, lineWidth: 1)
                 )
                 .contentShape(Rectangle())
                 .opacity(configuration.isPressed ? 0.5 : 1.0)

@@ -25,8 +25,8 @@ struct MainView: View {
                         appState.env.audioManager.play(.click)
                         appState.showSettings()
                     }
-                    .buttonStyle(AppsForgeButtonStyles.Minimal())
-                    .padding(.bottom, 8)
+                    .buttonStyle(ForgeButtonStyles.Minimal())
+                    .padding(.bottom)
                 case .settings:
                     Spacer()
                     SettingsView(timerIsRunning: appState.timerState.isRunning)
@@ -36,13 +36,17 @@ struct MainView: View {
                         appState.env.audioManager.play(.click)
                         appState.showTimer()
                     }
-                    .buttonStyle(AppsForgeButtonStyles.Minimal())
-                    .contentShape(Rectangle())
-                    .padding(.bottom, 8)
+                    .buttonStyle(ForgeButtonStyles.Minimal())
+                    .padding(.bottom)
                 }
             }
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .background(
+            RoundedRectangle(cornerRadius: 24)
+                .fill(Color.backgroundColor)
+                .shadow(color: .black.opacity(0.45), radius: 5, x: 5, y: 5)
+        )
         .overlay(alignment: .topTrailing) {
             switch appState.currentScreen {
             case .timer:
@@ -56,19 +60,26 @@ struct MainView: View {
                     
                     Button {
                         appState.env.audioManager.play(.click)
-                        appState.env.windowManager.showHistory(
-                            modelContext: appState.env.context
-                        )
+                        appState.env.windowManager.toggleHistory()
                     } label: {
                         Image(systemName: "h.square")
                             .font(.system(size: 28))
+                            .foregroundStyle(Color.buttonSecondary)
                     }
                     
                     Button {
-                        appState.terminateApplication()
+                        appState.env.windowManager.showAlert(
+                            message: "Exit?",
+                            buttonTitle: "Ok",
+                            onConfirm: {
+                                appState.terminateApplication()
+                            }) {
+                                print("On cancel")
+                            }
                     } label: {
                         Image(systemName: "xmark.square")
                             .font(.system(size: 28))
+                            .foregroundStyle(Color.buttonSecondary)
                     }
                     #if DEBUG
                     Group {
@@ -77,12 +88,14 @@ struct MainView: View {
                         } label: {
                             Image(systemName: "arrow.clockwise.square")
                                 .font(.system(size: 28))
+                                .foregroundStyle(Color.buttonSecondary)
                         }
                         Button {
                             appState.env.dataManager.clearDataBase()
                         } label: {
                             Image(systemName: "trash.slash.square")
                                 .font(.system(size: 28))
+                                .foregroundStyle(Color.buttonSecondary)
                         }
                     }
                     .background(.brown)
@@ -93,9 +106,9 @@ struct MainView: View {
                 .padding(.trailing, 16)
             case .settings:
                 EmptyView()
-                
             }
         }
+        .clipShape(RoundedRectangle(cornerRadius: 20))
     }
 }
 
@@ -111,9 +124,10 @@ struct ToggleButton: View {
             Image(
                 systemName: isOn ? systemImageOn : systemImageOff
             )
-            .foregroundStyle(isOn ? .primary : .secondary)
+            .foregroundStyle(isOn ? Color.buttonSecondary : .accentSecondary)
             .font(.system(size: 28))
         }
+        .buttonStyle(.plain)
         .contentShape(Rectangle())
     }
 }
