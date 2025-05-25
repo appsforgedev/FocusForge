@@ -13,14 +13,14 @@ struct TimerView: View {
     
     var body: some View {
         VStack {
-
+            Spacer()
             HStack {
                 Text(timerState.currentSession.title)
                     .font(.headline)
                     .foregroundColor(Color.textPrimary)
                     .padding(.vertical, 4)
                    
-                if let title = timerState.nextSession?.title {
+                if let title = timerState.nextSessionTitle {
                     HStack {
                         Text(Image(systemName: "arrow.forward.circle.dotted"))
                             .font(.subheadline)
@@ -44,33 +44,48 @@ struct TimerView: View {
                 .font(.system(size: 42, weight: .bold, design: .monospaced))
                 .frame(width: 140, alignment: .center) // фиксированная ширина
                 .animation(nil, value: formattedTime)
-            
-            switch timerState.status {
-            case .idle:
-                Button("Start") {
-                    timerState.start()
-                }
-                .buttonStyle(AppsForgeButtonStyles.Primary())
-            case .running:
-                HStack {
-                    Button("Pause") {
-                        timerState.pause()
+            Group {
+                switch timerState.status {
+                case .idle:
+                    Spacer()
+                    VStack {
+                        Button("Start") {
+                            withAnimation {
+                                timerState.start()
+                            }
+                        }
+                        .buttonStyle(ForgeButtonStyles.Primary())
+                        .transition(.opacity)
                     }
-                    .buttonStyle(AppsForgeButtonStyles.Primary())
-                    Button("Reset") {
-                        timerState.reset()
+                case .running:
+                    VStack {
+                        Button("Pause") {
+                            withAnimation {
+                                timerState.pause()
+                            }
+                        }
+                        .buttonStyle(ForgeButtonStyles.Primary())
+                        Button("Reset") {
+                            withAnimation {
+                                timerState.finalize()
+                            }
+                        }
+                        .buttonStyle(ForgeButtonStyles.Secondary())
                     }
-                    .buttonStyle(AppsForgeButtonStyles.Secondary())
-                    Button("Force") {
-                        timerState.forceTimer()
+                    .transition(.opacity)
+                case .paused(let remaining):
+                    Spacer()
+                    Button("Continue") {
+                        withAnimation {
+                            timerState.start(from: remaining)
+                        }
                     }
+                    .buttonStyle(ForgeButtonStyles.Primary())
+                    .transition(.opacity)
                 }
-            case .paused(let remaining):
-                Button("Continue") {
-                    timerState.start(from: remaining)
-                }
-                .buttonStyle(AppsForgeButtonStyles.Primary())
             }
+            .animation(.easeInOut(duration: 0.25), value: timerState.status)
+            Spacer()
         }
     }
     

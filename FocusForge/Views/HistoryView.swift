@@ -21,31 +21,36 @@ struct HistoryView: View {
 
     var body: some View {
         VStack {
-            List {
-                ForEach(cycles) { cycle in
-                    HStack {
-                        Text(cycle.startDate.formatted(date: .numeric, time: .complete))
-                        Text("Is full: \(cycle.isFull ? "Yes" : "No")")
-                        Text("Sessions count: \(cycle.sessions.count)")
-                        ForEach(cycle.sortedSessions) { session in
+            VStack {
+                ZStack {
+                    Color.background.ignoresSafeArea()
+                    List {
+                        ForEach(cycles) { cycle in
                             HStack {
-//                                Text("\(session.id)").scaledToFit()
-                                Text(session.symbol)
-                                    .font(.caption)
-                                    .fontWeight(.medium)
-                                    .frame(width: 16, height: 16)
-//                                    .background(session.isInterrupted ? .red : .green)
-                                    .background(
-                                        RoundedRectangle(cornerRadius: 6)
-                                            .stroke(session.isInterrupted ? .red : .green, lineWidth: 1)
-                                    )
-//                                Spacer()
-////                                Text(session.startTime.formatted(date: .abbreviated, time: .complete))
-//                                Text(session.isInterrupted ? "Interrupted" : "Full")
+                                Text(cycle.startDate.formatted(date: .numeric, time: .complete))
+                                    .foregroundStyle(.textPrimary)
+                                Text("Is full: \(cycle.isFull ? "Yes" : "No")")
+                                    .foregroundStyle(.textPrimary)
+                                Text("Sessions count: \(cycle.sessions.count)")
+                                    .foregroundStyle(.textPrimary)
+                                ForEach(cycle.sortedSessions) { session in
+                                    HStack {
+                                        Image(systemName: "\(session.symbol).square")
+                                            .font(.system(size: 18))
+                                            .symbolRenderingMode(.palette)
+                                            .foregroundStyle(Color.textPrimary, session.isInterrupted ? Color.error : .success)
+                                    }
+                                    
+                                }
                             }
                         }
                     }
+                    .background(Color.clear)
+                    .listStyle(.plain)
+                    .scrollIndicators(.hidden)
+                    .scrollContentBackground(.hidden)
                 }
+                LegendView()
             }
             List {
                 ForEach(records) { record in
@@ -64,8 +69,55 @@ struct HistoryView: View {
     }
 }
 
+struct LegendView: View {
+    var body: some View {
+        VStack(alignment: .center) {
+            Text("Legend")
+                .font(.headline)
+                .foregroundStyle(.textPrimary)
+                .padding(4)
+            HStack {
+                Spacer()
+                ForEach(PomodoroSession.allCases) { session in
+                    HStack {
+                        Image(systemName: "\(session.sybmol).square")
+                            .font(.footnote)
+                            .foregroundStyle(.textPrimary)
+                        Text("- \(session.title)")
+                            .font(.footnote)
+                            .foregroundStyle(.textPrimary)
+                    }
+                }
+                Spacer()
+            }
+            HStack {
+                Spacer()
+                HStack {
+                    Image(systemName: "square")
+                        .font(.subheadline)
+                        .foregroundStyle(.success)
+                    Text("- Success session")
+                        .font(.subheadline)
+                        .foregroundStyle(.textPrimary)
+                }
+                HStack {
+                    Image(systemName: "square")
+                        .font(.subheadline)
+                        .foregroundStyle(.error)
+                    Text("- Interrupt session")
+                        .font(.subheadline)
+                        .foregroundStyle(.textPrimary)
+                }
+                Spacer()
+            }
+            .padding(.bottom, 8)
+        }
+        .background(Color.backgroundColor)
+    }
+}
+
 extension SessionEntity {
     var symbol: String {
-        self.type.first?.uppercased() ?? "?"
+        self.type.first?.lowercased() ?? "?"
     }
 }

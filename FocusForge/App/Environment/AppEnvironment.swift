@@ -33,8 +33,9 @@ extension AppEnvironment {
     static func live(context: ModelContext) -> AppEnvironment {
         let settingsStore = SettingsStore()
         let audioManager = AudioManager(settingsStore: settingsStore)
-        let windowManager = WindowManager()
         let dataManager = DataManager(modelContext: context)
+        let windowManager = WindowManager(modelContext: context)
+        
         return .init(
             settingsStore: settingsStore,
             audioManager: audioManager,

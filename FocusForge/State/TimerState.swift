@@ -32,6 +32,16 @@ final class TimerState {
     var isRunning: Bool {
         status != .idle
     }
+    
+    var nextSessionTitle: String? {
+        if
+            currentSession == .longBreak,
+            environment.settings.isLongBreakFinish
+        {
+            return "End Cycle"
+        }
+        return nextSession?.title
+    }
 
     let interval: TimeInterval = 1
     private var timerTask: Task<Void, Never>?
@@ -61,15 +71,15 @@ final class TimerState {
     func start(from initialTime: TimeInterval? = nil) {
         guard case .running = status else {
             sessionStartDate = Date()
-            environment.audioManager.play(.startFocus)
             let initialTime = initialTime ?? duration(for: currentSession)
+            environment.audioManager.play(.startFocus)
             start(from: initialTime)
             return
         }
     }
 
     private func start(from initialTime: TimeInterval) {
-        stop()
+        stopTimer()
         timeRemaining = initialTime
         status = .running
         sessionsBeforeLongBreak = settings.sessionsBeforeLongBreak
@@ -99,14 +109,17 @@ final class TimerState {
         guard case .running = status else { return }
         
         environment.audioManager.play(.pause)
-        stop()
+        stopTimer()
         status = .paused(remaining: timeRemaining)
+    }
+    
+    func finalize() {
+        environment.audioManager.play(.reset)
+        forceFinalizeSession()
+        reset()
     }
 
     func reset() {
-        stop()
-        environment.audioManager.play(.reset)
-        interruptSession()
         currentSession = .focus
         timeRemaining = duration(for: currentSession)
         status = .idle
@@ -114,7 +127,7 @@ final class TimerState {
         nextSession = nil
     }
 
-    private func stop() {
+    private func stopTimer() {
         timerTask?.cancel()
         timerTask = nil
     }
@@ -123,56 +136,88 @@ final class TimerState {
 
     private func handleSessionCompletion() {
         guard let sessionStartDate else {
-            print("⚠️ Нет времени начала сессии")
+            print("⚠️ Session is not started yet")
             return
         }
-        environment.dataManager.recordSession(
-            type: currentSession,
-            start: sessionStartDate,
-            end: Date()
+        recordSession(
+            startTime: sessionStartDate,
+            currentSession: currentSession
         )
+    
         self.sessionStartDate = nil
         
         switch currentSession {
         case .focus:
             environment.audioManager.play(.endFocus)
             completedFocusSessions += 1
-
             currentSession = completedFocusSessions % sessionsBeforeLongBreak == 0
                 ? .longBreak
                 : .shortBreak
 
         case .shortBreak:
-            environment.audioManager.play(.endShortBreak)
             currentSession = .focus
         case .longBreak:
             environment.audioManager.play(.endLongBreak)
             currentSession = .focus
             environment.dataManager.finishCurrentCycle()
+            if environment.settingsStore.isLongBreakFinish {
+                stopTimer()
+                reset()
+                return
+            }
         }
 
         timeRemaining = duration(for: currentSession)
         self.sessionStartDate = Date()
+        if currentSession == .focus {
+            environment.audioManager.play(.startFocus)
+        }
         start(from: timeRemaining)
     }
     
     func interruptSession() {
         guard let sessionStartDate else { return }
         
-        environment.dataManager.recordSession(
-            type: currentSession,
-            start: sessionStartDate,
-            end: Date(),
-            interrupted: true
+        recordSession(
+            startTime: sessionStartDate,
+            currentSession: currentSession,
+            isInterrupted: true
         )
         
         self.sessionStartDate = nil
     }
     
+    func forceFinalizeSession() {
+        guard isRunning, let sessionStartDate else { return }
+
+        recordSession(
+            startTime: sessionStartDate,
+            currentSession: currentSession,
+            isInterrupted: true
+        )
+        
+        stopTimer()
+    }
+    
+    private func recordSession(
+        startTime: Date,
+        currentSession: PomodoroSession,
+        isInterrupted: Bool = false
+    ) {
+        environment.dataManager.recordSession(
+            type: currentSession,
+            start: startTime,
+            end: Date(),
+            interrupted: isInterrupted
+        )
+    }
+
+    
     private func getNextSession() -> PomodoroSession {
         switch currentSession {
         case .focus:
-            return (completedFocusSessions > 0 && completedFocusSessions % sessionsBeforeLongBreak == 0)
+            let nextCompleted = completedFocusSessions + 1
+            return (nextCompleted % sessionsBeforeLongBreak == 0)
                 ? .longBreak
                 : .shortBreak
         case .longBreak, .shortBreak:

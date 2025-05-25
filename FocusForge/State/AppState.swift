@@ -57,12 +57,29 @@ final class AppState {
                             isRunning: timerState.isRunning
                         )
                     }
-                } onChange: {
-                    // Перезапускаем цикл при изменении наблюдаемых свойств (если нужно)
-                }
+                } onChange: { }
                 
                 try? await Task.sleep(nanoseconds: 100_000_000) // 0.1 секунды
             }
         }
+    }
+}
+
+// MARK: App terminate section
+
+extension AppState {
+    func terminateApplication() {
+
+        timerState.forceFinalizeSession()
+
+        // 3. Сохранить данные SwiftData
+        do {
+            try env.context.save()
+        } catch {
+            print("⚠️ Error saving data context: \(error)")
+        }
+
+        // 4. Завершить приложение
+        NSApplication.shared.terminate(nil)
     }
 }

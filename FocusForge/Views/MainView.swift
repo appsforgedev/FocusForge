@@ -25,8 +25,8 @@ struct MainView: View {
                         appState.env.audioManager.play(.click)
                         appState.showSettings()
                     }
-                    .buttonStyle(AppsForgeButtonStyles.Minimal())
-                    .padding(.bottom, 8)
+                    .buttonStyle(ForgeButtonStyles.Minimal())
+                    .padding(.bottom)
                 case .settings:
                     Spacer()
                     SettingsView(timerIsRunning: appState.timerState.isRunning)
@@ -36,55 +36,79 @@ struct MainView: View {
                         appState.env.audioManager.play(.click)
                         appState.showTimer()
                     }
-                    .buttonStyle(AppsForgeButtonStyles.Minimal())
-                    .contentShape(Rectangle())
-                    .padding(.bottom, 8)
+                    .buttonStyle(ForgeButtonStyles.Minimal())
+                    .padding(.bottom)
                 }
             }
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .background(Color.backround)
+        .background(
+            RoundedRectangle(cornerRadius: 24)
+                .fill(Color.backgroundColor)
+                .shadow(color: .black.opacity(0.45), radius: 5, x: 5, y: 5)
+        )
         .overlay(alignment: .topTrailing) {
             switch appState.currentScreen {
             case .timer:
                 VStack(spacing: 8) {
                     Spacer()
                     ToggleButton(
-                        systemImageOn: "speaker.wave.2.circle",
-                        systemImageOff: "speaker.slash.circle",
+                        systemImageOn: "speaker.square",
+                        systemImageOff: "speaker.square.fill",
                         isOn: appState.env.settingsStore.binding(for: \.isSoundEnabled)
                     )
                     
                     Button {
                         appState.env.audioManager.play(.click)
-                        appState.env.windowManager.showHistory(
-                            modelContext: appState.env.context
-                        )
+                        appState.env.windowManager.toggleHistory()
                     } label: {
-                        Image(systemName: "list.bullet.circle")
-                            .font(.system(size: 22))
-                            .foregroundStyle(Color.textPrimary)
+                        Image(systemName: "h.square")
+                            .font(.system(size: 28))
+                            .foregroundStyle(Color.buttonSecondary)
                     }
-                    .buttonStyle(.plain)
-                    .contentShape(Rectangle())
                     
                     Button {
-                        appState.env.dataManager.clearDataBase()
+                        appState.env.windowManager.showAlert(
+                            message: "Exit?",
+                            buttonTitle: "Ok",
+                            onConfirm: {
+                                appState.terminateApplication()
+                            }) {
+                                print("On cancel")
+                            }
                     } label: {
-                        Image(systemName: "trash.slash.circle")
-                            .font(.system(size: 22))
-                            .foregroundStyle(Color.textPrimary)
-                            
+                        Image(systemName: "xmark.square")
+                            .font(.system(size: 28))
+                            .foregroundStyle(Color.buttonSecondary)
                     }
-                    .buttonStyle(.plain)
+                    #if DEBUG
+                    Group {
+                        Button {
+                            appState.timerState.forceTimer()
+                        } label: {
+                            Image(systemName: "arrow.clockwise.square")
+                                .font(.system(size: 28))
+                                .foregroundStyle(Color.buttonSecondary)
+                        }
+                        Button {
+                            appState.env.dataManager.clearDataBase()
+                        } label: {
+                            Image(systemName: "trash.slash.square")
+                                .font(.system(size: 28))
+                                .foregroundStyle(Color.buttonSecondary)
+                        }
+                    }
+                    .background(.brown)
+                    #endif
                     Spacer()
                 }
+                .buttonStyle(.plain)
                 .padding(.trailing, 16)
             case .settings:
                 EmptyView()
-                
             }
         }
+        .clipShape(RoundedRectangle(cornerRadius: 20))
     }
 }
 
@@ -100,8 +124,8 @@ struct ToggleButton: View {
             Image(
                 systemName: isOn ? systemImageOn : systemImageOff
             )
-            .foregroundStyle(isOn ? Color.textPrimary : .textSecondary)
-            .font(.system(size: 22))
+            .foregroundStyle(isOn ? Color.buttonSecondary : .accentSecondary)
+            .font(.system(size: 28))
         }
         .buttonStyle(.plain)
         .contentShape(Rectangle())
