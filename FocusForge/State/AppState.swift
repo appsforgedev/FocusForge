@@ -44,8 +44,7 @@ final class AppState {
         Task {
             while true {
                 withObservationTracking {
-                    let duration = timerState.duration(for: timerState.currentSession)
-                    let progress = timerState.timeRemaining / max(duration, 1)
+                    let progress = timerState.timeRemaining / max(timerState.currentDuration, 1)
                     let formattedTime = TimeFormatter.string(from: timerState.displayTime)
                     
                     // Обновляем UI на главном потоке
