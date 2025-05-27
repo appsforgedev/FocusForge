@@ -43,6 +43,21 @@ extension AppEnvironment {
             dataManager: dataManager
         )
     }
+    
+    static func preview() -> AppEnvironment {
+        let settingsStore = SettingsStore()
+        
+        let audioManager = AudioManager(settingsStore: settingsStore)
+        let windowManager = WindowManager(modelContext: .preview)
+        let dataManager = DataManager(modelContext: .preview)
+        
+        return .init(
+            settingsStore: settingsStore,
+            audioManager: audioManager,
+            windowManager: windowManager,
+            dataManager: dataManager
+        )
+    }
 }
 
 extension AppEnvironment {
@@ -50,4 +65,15 @@ extension AppEnvironment {
     var settings: SettingsStore { settingsStore }
     var sound: AudioManager { audioManager }
     var windows: WindowManager { windowManager }
+}
+
+extension ModelContext {
+    static var preview: ModelContext {
+        let schema = Schema([SessionEntity.self, CycleEntity.self])
+        let container = try! ModelContainer(
+            for: schema,
+            configurations: ModelConfiguration(isStoredInMemoryOnly: true)
+        )
+        return ModelContext(container)
+    }
 }

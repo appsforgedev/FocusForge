@@ -27,6 +27,10 @@ final class TimerState {
     var nextSession: PomodoroSession? = nil
     var status: TimerStatus = .idle
     
+    var currentDuration: TimeInterval {
+        duration(for: currentSession)
+    }
+    
     private var sessionStartDate: Date?
     
     var isRunning: Bool {

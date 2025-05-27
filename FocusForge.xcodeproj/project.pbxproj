@@ -29,9 +29,22 @@
 		63959A282DD09D2400B5F6E6 /* FocusForgeUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = FocusForgeUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		63B33D542DE4AB4E00920AB4 /* Exceptions for "FocusForge" folder in "FocusForge" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = 63959A0C2DD09D2300B5F6E6 /* FocusForge */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		63959A0F2DD09D2300B5F6E6 /* FocusForge */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				63B33D542DE4AB4E00920AB4 /* Exceptions for "FocusForge" folder in "FocusForge" target */,
+			);
 			path = FocusForge;
 			sourceTree = "<group>";
 		};
@@ -401,6 +414,7 @@
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = FocusForge/Info.plist;
 				INFOPLIST_KEY_LSUIElement = YES;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -429,6 +443,7 @@
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = FocusForge/Info.plist;
 				INFOPLIST_KEY_LSUIElement = YES;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				LD_RUNPATH_SEARCH_PATHS = (

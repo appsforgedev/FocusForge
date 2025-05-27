@@ -11,7 +11,7 @@ import SwiftData
 
 struct MainView: View {
     @Environment(AppState.self) private var appState
-    @Environment(\.openWindow) private var openWindow
+//    @Environment(\.openWindow) private var openWindow
     
     var body: some View {
         ZStack(alignment: .topTrailing) {
@@ -132,6 +132,7 @@ struct ToggleButton: View {
     }
 }
 
-//#Preview {
-//    MainView(viewModel: MainScreenViewModel()).environmentObject(AppState())
-//}
+#Preview {
+    MainView().environment(AppState.init(environment: .preview()))
+        .frame(width: 300, height: 280)
+}

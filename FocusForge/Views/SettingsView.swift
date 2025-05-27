@@ -16,16 +16,17 @@ struct SettingsView: View {
         if timerIsRunning {
             VStack {
                 Text("Session is running, please reset it for configure")
-                    .font(.title3)
-                    .monospaced()
+                    .font(.forgeTitle)
+                    .foregroundStyle(Color.textPrimary)
                     .multilineTextAlignment(.center)
+                    .padding(8)
             }
         } else {
             VStack(spacing: 5) {
                 Text("Settings")
-                    .font(.headline)
+                    .font(.forgeTitle)
                     .foregroundStyle(Color.textPrimary)
-                Spacer()
+                    .padding(4)
                 CounterView(
                     text: "Focus:",
                     step: 5,
@@ -61,7 +62,7 @@ struct SettingsView: View {
                 )
                 
             }
-            .padding()
+            .padding(8)
         }
     }
 
@@ -78,7 +79,8 @@ struct ToggleView: View {
             Spacer()
             Toggle(isOn: $isOn) {
                 Text("")
-            }.toggleStyle(
+            }
+            .toggleStyle(
                 CheckboxToggleStyle(
                     fillColor: .buttonSecondary,
                     borderColor: .gray.opacity(0.7),
@@ -110,46 +112,21 @@ struct CounterView<T: Strideable & Comparable>: View where T.Stride: SignedNumer
             Spacer()
             Text("\(displayValue)")
                 .foregroundStyle(Color.textPrimary)
-            Button {
+            
+            Button("+") {
                 count = count.advanced(by: step)
                 appEnvironment.audioManager.play(.click)
                 updateDisabledStates()
-            } label: {
-                Text("+")
-                    .font(.subheadline)
-                    .frame(width: 24, height: 24)
-                    .foregroundStyle(Color.buttonPrimaryText)
-                    .background(
-                        RoundedRectangle(cornerRadius: 4)
-                            .fill(Color.buttonSecondary)
-                            .overlay(
-                                RoundedRectangle(cornerRadius: 4)
-                                    .stroke(.gray.opacity(0.7), lineWidth: 1)
-                            )
-                    )
             }
-            .buttonStyle(.plain)
+            .buttonStyle(ForgeButtonStyles.Square())
             .disabled(plusDisabled)
-
-            Button {
+            
+            Button("-") {
                 count = count.advanced(by: -step)
                 appEnvironment.audioManager.play(.click)
                 updateDisabledStates()
-            } label: {
-                Text("-")
-                    .font(.subheadline)
-                    .frame(width: 24, height: 24)
-                    .foregroundStyle(Color.buttonPrimaryText)
-                    .background(
-                        RoundedRectangle(cornerRadius: 4)
-                            .fill(Color.buttonSecondary)
-                            .overlay(
-                                RoundedRectangle(cornerRadius: 4)
-                                    .stroke(.gray.opacity(0.7), lineWidth: 1)
-                            )
-                    )
             }
-            .buttonStyle(.plain)
+            .buttonStyle(ForgeButtonStyles.Square())
             .disabled(minusDisabled)
             
         }
@@ -185,41 +162,7 @@ extension Text {
 struct SettingsStyle: ViewModifier {
     func body(content: Content) -> some View {
         content
-            .font(.body)
-            .fontWeight(.medium)
+            .font(.forgeBody)
             .foregroundStyle(Color.textPrimary)
-    }
-}
-
-struct CheckboxToggleStyle: ToggleStyle {
-    var fillColor: Color = .green
-    var borderColor: Color = .gray
-    var checkmarkColor: Color = .white
-    var size: CGFloat = 20
-
-    func makeBody(configuration: Configuration) -> some View {
-        HStack {
-            Button(action: { configuration.isOn.toggle() }) {
-                ZStack {
-                    RoundedRectangle(cornerRadius: 4)
-                        .stroke(borderColor, lineWidth: 2)
-                        .background(
-                            RoundedRectangle(cornerRadius: 4)
-                                .fill(configuration.isOn ? fillColor : .clear)
-                        )
-                        .frame(width: size, height: size)
-                        .contentShape(Rectangle())
-
-                    if configuration.isOn {
-                        Image(systemName: "checkmark")
-                            .foregroundColor(checkmarkColor)
-                            .font(.system(size: size * 0.6, weight: .bold))
-                    }
-                }
-            }
-            .buttonStyle(.plain)
-
-            configuration.label
-        }
     }
 }

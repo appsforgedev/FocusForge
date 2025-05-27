@@ -13,7 +13,7 @@ struct ForgeButtonStyles {
     struct Primary: ButtonStyle {
         func makeBody(configuration: Configuration) -> some View {
             configuration.label
-                .font(.headline)
+                .font(.forgeButton)
                 .foregroundColor(Color.buttonPrimaryText)
                 .padding(.horizontal, 24)
                 .padding(.vertical, 10)
@@ -33,7 +33,7 @@ struct ForgeButtonStyles {
     struct Secondary: ButtonStyle {
         func makeBody(configuration: Configuration) -> some View {
             configuration.label
-                .font(.headline)
+                .font(.forgeButton)
                 .foregroundColor(.textPrimary)
                 .padding(.horizontal, 16)
                 .padding(.vertical, 6)
@@ -53,7 +53,7 @@ struct ForgeButtonStyles {
     struct Minimal: ButtonStyle {
         func makeBody(configuration: Configuration) -> some View {
             configuration.label
-                .font(.footnote)
+                .font(.forgeButton)
                 .foregroundColor(Color.textPrimary)
                 .frame(minWidth: 75, maxWidth: 85, minHeight: 14)
                 .padding(6)
@@ -63,6 +63,26 @@ struct ForgeButtonStyles {
                 )
                 .contentShape(Rectangle())
                 .opacity(configuration.isPressed ? 0.5 : 1.0)
+        }
+    }
+    
+    struct Square: ButtonStyle {
+        @Environment(\.isEnabled) private var isEnabled
+        
+        func makeBody(configuration: Configuration) -> some View {
+            configuration.label
+                .font(.subheadline)
+                .frame(width: 24, height: 24)
+                .foregroundStyle(isEnabled ? .buttonPrimaryText : .gray)
+                .background(
+                    RoundedRectangle(cornerRadius: 4)
+                        .fill(isEnabled ? .buttonSecondary : Color.gray.opacity(0.2))
+                        .overlay(
+                            RoundedRectangle(cornerRadius: 4)
+                                .stroke(.gray.opacity(0.7), lineWidth: 1)
+                        )
+                )
+                .opacity(configuration.isPressed ? 0.6 : 1.0)
         }
     }
 }

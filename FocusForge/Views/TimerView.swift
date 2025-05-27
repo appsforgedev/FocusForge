@@ -12,26 +12,24 @@ struct TimerView: View {
     @Bindable var timerState: TimerState
     
     var body: some View {
-        VStack {
+        VStack(spacing: 0) {
             Spacer()
             HStack {
                 Text(timerState.currentSession.title)
-                    .font(.headline)
+                    .font(.forgeTitle)
                     .foregroundColor(Color.textPrimary)
                     .padding(.vertical, 4)
                    
                 if let title = timerState.nextSessionTitle {
                     HStack {
                         Text(Image(systemName: "arrow.forward.circle.dotted"))
-                            .font(.subheadline)
+                            .font(.forgeButton)
                             .foregroundColor(.gray.opacity(0.7))
-                            .padding(.vertical, 4)
                         Text("\(title)")
-                            .font(.subheadline)
+                            .font(.forgeButton)
                             .foregroundColor(.gray.opacity(0.7))
-                            .padding(.vertical, 4)
                     }
-                   
+                    .padding(.vertical, 4)
                 }
               
             }
@@ -39,24 +37,33 @@ struct TimerView: View {
             .transition(.asymmetric(insertion: .move(edge: .trailing), removal: .move(edge: .leading)))
             .animation(.easeInOut(duration: 0.3), value: timerState.currentSession.title)
             
+            if timerState.isRunning {
+                ZStack {
+                    ForgeProgressBar(
+                        progress: progress,
+                        color: progressColor(for: timerState.currentSession)
+                    )
+                    .padding(.vertical, 4)
+                }
+            }
+            
             Text(formattedTime)
                 .foregroundStyle(Color.textPrimary)
-                .font(.system(size: 42, weight: .bold, design: .monospaced))
+                .font(.forgeTimer)
                 .frame(width: 140, alignment: .center) // фиксированная ширина
                 .animation(nil, value: formattedTime)
+                .padding(.top, 8)
+                .padding(.bottom, 12)
+            
             Group {
                 switch timerState.status {
                 case .idle:
-                    Spacer()
-                    VStack {
-                        Button("Start") {
-                            withAnimation {
-                                timerState.start()
-                            }
+                    Button("Start") {
+                        withAnimation {
+                            timerState.start()
                         }
-                        .buttonStyle(ForgeButtonStyles.Primary())
-                        .transition(.opacity)
                     }
+                    .buttonStyle(ForgeButtonStyles.Primary())
                 case .running:
                     VStack {
                         Button("Pause") {
@@ -72,24 +79,46 @@ struct TimerView: View {
                         }
                         .buttonStyle(ForgeButtonStyles.Secondary())
                     }
-                    .transition(.opacity)
                 case .paused(let remaining):
-                    Spacer()
                     Button("Continue") {
                         withAnimation {
                             timerState.start(from: remaining)
                         }
                     }
                     .buttonStyle(ForgeButtonStyles.Primary())
-                    .transition(.opacity)
                 }
             }
+            .transition(.opacity)
             .animation(.easeInOut(duration: 0.25), value: timerState.status)
             Spacer()
         }
     }
-    
+}
+
+extension TimerView {
     private var formattedTime: String {
         TimeFormatter.string(from: timerState.displayTime)
     }
+    
+    private var progress: CGFloat {
+        guard timerState.timeRemaining > 0 else { return 0 }
+        return 1 - timerState.timeRemaining / timerState.currentDuration
+    }
+    
+    private func progressColor(for type: PomodoroSession) -> Color {
+        switch type {
+        case .focus:
+            return .sessionFocus
+        case .shortBreak:
+            return .sessionShortBreak
+        case .longBreak:
+            return .sessionLongBreak
+        }
+    }
+}
+
+#Preview {
+    TimerView(timerState: .init(environment: .preview()))
+        .frame(width: 300, height: 280)
+        .background(Color.backgroundColor)
 }

@@ -18,14 +18,12 @@ final class DataManager {
         self.modelContext = modelContext
     }
     
-    // Запуск нового цикла
     func startNewCycle(at date: Date) {
         let newCycle = CycleEntity(startDate: date)
         modelContext.insert(newCycle)
         self.activeCycle = newCycle
     }
 
-    // Завершение текущего цикла (например, после длинного перерыва)
     func finishCurrentCycle() {
         self.activeCycle = nil
     }
@@ -38,7 +36,6 @@ final class DataManager {
     ) {
         let context = modelContext
 
-        // Если активного цикла нет, создаем
         if activeCycle == nil {
             activeCycle = CycleEntity(startDate: start)
             context.insert(activeCycle!)

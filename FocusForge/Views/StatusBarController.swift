@@ -27,9 +27,11 @@ class StatusBarController {
         window.backgroundColor = .clear
         window.hasShadow = true
         window.level = .floating
+        window.ignoresMouseEvents = false
+        window.isMovableByWindowBackground = false
         window.contentView = hostingController.view
         window.isReleasedWhenClosed = false
-        window.collectionBehavior = [.transient]
+        window.collectionBehavior = [.transient, .ignoresCycle]
         
         self.mainWindow = window
 
@@ -42,6 +44,25 @@ class StatusBarController {
             button.imagePosition = .imageLeading
             button.title = "00:00"
             button.target = self
+        }
+        
+        
+        // MARK: Notifications
+        
+        NotificationCenter.default.addObserver(
+            forName: NSWindow.didResignKeyNotification,
+            object: window,
+            queue: .main
+        ) { [weak self] _ in
+            self?.mainWindow?.orderOut(nil)
+        }
+        
+        NotificationCenter.default.addObserver(
+            forName: NSApplication.didResignActiveNotification,
+            object: nil,
+            queue: .main
+        ) { [weak self] _ in
+            self?.mainWindow?.orderOut(nil)
         }
     }
 
@@ -80,7 +101,7 @@ class StatusBarController {
                 .withSymbolConfiguration(NSImage.SymbolConfiguration(pointSize: 14, weight: .regular))
             Task { @MainActor in
                 if let button = statusItem.button {
-                    button.font = NSFont.monospacedDigitSystemFont(ofSize: 12, weight: .regular)
+                    button.font = .monospacedDigitSystemFont(ofSize: 12, weight: .medium)
                     button.image = configuredImage
                     button.title = "\(time)"
                 }
