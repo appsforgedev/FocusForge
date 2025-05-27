@@ -9,110 +9,134 @@ import SwiftUI
 import SwiftData
 
 struct HistoryView: View {
-    @Query(sort: \CycleEntity.startDate, order: .reverse) var cycles: [CycleEntity]
-    @Query(sort: \SessionEntity.startTime, order: .reverse) var records: [SessionEntity]
-
-    private var dateFormatter: DateFormatter {
-        let formatter = DateFormatter()
-        formatter.dateStyle = .medium
-        formatter.timeStyle = .short
-        return formatter
-    }
-
+    @Bindable var state: HistoryState
+    
     var body: some View {
-        VStack {
-            VStack {
-                ZStack {
-                    Color.background.ignoresSafeArea()
-                    List {
-                        ForEach(cycles) { cycle in
-                            HStack {
-                                Text(cycle.startDate.formatted(date: .numeric, time: .complete))
-                                    .foregroundStyle(.textPrimary)
-                                Text("Is full: \(cycle.isFull ? "Yes" : "No")")
-                                    .foregroundStyle(.textPrimary)
-                                Text("Sessions count: \(cycle.sessions.count)")
-                                    .foregroundStyle(.textPrimary)
-                                ForEach(cycle.sortedSessions) { session in
-                                    HStack {
-                                        Image(systemName: "\(session.symbol).square")
-                                            .font(.system(size: 18))
-                                            .symbolRenderingMode(.palette)
-                                            .foregroundStyle(Color.textPrimary, session.isInterrupted ? Color.error : .success)
-                                    }
-                                    
-                                }
-                            }
-                        }
-                    }
-                    .background(Color.clear)
-                    .listStyle(.plain)
-                    .scrollIndicators(.hidden)
-                    .scrollContentBackground(.hidden)
-                }
-                LegendView()
-            }
-            List {
-                ForEach(records) { record in
-                    HStack {
-                        Text("\(record.id)").scaledToFit()
-                        Text(record.type.capitalized)
-                        Spacer()
-                        Text(record.startTime.formatted(date: .abbreviated, time: .complete))
-                        Text(record.isInterrupted ? "Interrupted" : "Full")
-                    }
-                    .padding()
-                }
-            }
+        HStack(spacing: 0) {
+            DashboardView(selectedSession: state.selectedSession)
+                .frame(minWidth: 300, maxWidth: 300, maxHeight: .infinity)
+                .background(Color.backgroundColor)
             
+            Divider()
+                .background(.accentSecondary)
+            
+            SessionsListView(state: state)
+                .frame(minWidth: 400)
+                .background(Color.backgroundColor)
+            
+            Divider()
+                .background(.accentSecondary)
+            
+            if let session = state.selectedSession {
+                SessionDetailView(session: session) {
+                    withAnimation {
+                        state.clearSelection()
+                    }
+                }
+                .frame(minWidth: 300, maxHeight: .infinity)
+                .background(Color.backgroundColor)
+                .transition(.blurReplace.combined(with: .opacity))
+                .animation(.default.speed(0.5), value: state.selectedSession)
+            }
         }
     }
 }
 
-struct LegendView: View {
+struct SessionsListView: View {
+    @Bindable var state: HistoryState
+    
     var body: some View {
-        VStack(alignment: .center) {
-            Text("Legend")
-                .font(.headline)
-                .foregroundStyle(.textPrimary)
-                .padding(4)
+        VStack {
             HStack {
+                VStack(alignment: .leading) {
+                    CustomPicker(title: "Filter", options: SessionFilter.allCases, selection: $state.filter)
+                    CustomPicker(title: "Sort", options: SortOrder.allCases, selection: $state.sortOrder)
+                }
                 Spacer()
-                ForEach(PomodoroSession.allCases) { session in
+            }
+            .padding(.horizontal, 8)
+            .padding(.bottom, 8)
+            
+            List {
+                ForEach(state.visibleSessions, id: \.id) { session in
                     HStack {
-                        Image(systemName: "\(session.sybmol).square")
-                            .font(.footnote)
-                            .foregroundStyle(.textPrimary)
-                        Text("- \(session.title)")
-                            .font(.footnote)
+                        Text(session.type.capitalized)
+                            .font(.forgeBody)
+                            .foregroundStyle(session.isInterrupted ? .error : .success)
+                        Spacer()
+                        Text(session.startTime.formatted(date: .abbreviated, time: .shortened))
+                            .font(.forgeBody)
                             .foregroundStyle(.textPrimary)
                     }
+                    .background(state.selectedSession?.id == session.id ? Color.gray.opacity(0.1) : Color.clear)
+                    .frame(maxHeight: .infinity)
+                    .contentShape(Rectangle())
+                    .onTapGesture {
+                        withAnimation {
+                            state.select(session: session)
+                        }
+                    }
                 }
-                Spacer()
             }
-            HStack {
-                Spacer()
-                HStack {
-                    Image(systemName: "square")
-                        .font(.subheadline)
-                        .foregroundStyle(.success)
-                    Text("- Success session")
-                        .font(.subheadline)
-                        .foregroundStyle(.textPrimary)
-                }
-                HStack {
-                    Image(systemName: "square")
-                        .font(.subheadline)
-                        .foregroundStyle(.error)
-                    Text("- Interrupt session")
-                        .font(.subheadline)
-                        .foregroundStyle(.textPrimary)
-                }
-                Spacer()
-            }
-            .padding(.bottom, 8)
+            .background(Color.clear)
+            .listStyle(.plain)
+            .listRowInsets(nil)
+            .scrollIndicators(.never)
+            .scrollContentBackground(.hidden)
+            
+            Text(state.sessionCountSummary)
+                .font(.forgeSecond)
+                .foregroundStyle(.textPrimary)
+                .padding(.top, 4)
         }
-        .background(Color.backgroundColor)
+        .padding(8)
+    }
+}
+
+struct SessionDetailView: View {
+    
+    var session: SessionEntity
+    var onClose: (() -> Void)?
+    
+    var body: some View {
+        VStack(alignment: .center) {
+            Spacer()
+            VStack(alignment: .leading) {
+                Text("Details:")
+                Text("Started: \(session.startTime.formatted(date: .long, time: .complete))")
+                Text("Interrupted: \(session.isInterrupted ? "Yes" : "No")")
+                // Дополнительные детали
+            }
+            .foregroundStyle(.textPrimary)
+            .padding()
+            Spacer()
+            Button("Close") {
+                onClose?()
+            }
+            .buttonStyle(ForgeButtonStyles.Minimal())
+            .padding()
+        }
+        
+    }
+}
+
+struct DashboardView: View {
+    var selectedSession: SessionEntity?
+    var body: some View {
+        VStack {
+            Text("Dashboard")
+                .foregroundStyle(.textPrimary)
+            Text(selectedSession?.symbol ?? "?")
+                .foregroundStyle(.textPrimary)
+        }
+    }
+}
+
+struct EmptyDetailView: View {
+    
+    var body: some View {
+        Text("Choose a session in the list")
+            .foregroundStyle(.textPrimary)
     }
 }
 
