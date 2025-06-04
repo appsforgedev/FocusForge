@@ -9,18 +9,18 @@ import Foundation
 import SwiftData
 
 @Model
-final class CycleEntity {
+final class CycleEntity: Identifiable {
     @Attribute(.unique) var id: UUID
     var startDate: Date
     var endDate: Date?
     var sessions: [SessionEntity] = []
     
-    var sortedSessions: [SessionEntity] {
-        sessions.sorted { $0.startTime < $1.startTime }
+    var displayName: String {
+        startDate.formatted(date: .abbreviated, time: .omitted)
     }
     
     var isFull: Bool {
-        sessions.contains { $0.type == "longBreak" }
+        sessions.contains { $0.type == "longBreak" } && !sessions.contains { $0.isInterrupted }
     }
 
     init(startDate: Date = .now) {

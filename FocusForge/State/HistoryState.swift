@@ -9,14 +9,11 @@ import Foundation
 
 @Observable
 final class HistoryState {
-    // Сырые данные
     var cycles: [CycleEntity] = []
     var sessions: [SessionEntity] = []
 
-    // UI-состояние
     var selectedSession: SessionEntity?
     var filter: SessionFilter = .all
-    var sortOrder: SortOrder = .byDateDescending
 
     // Computed
     var visibleSessions: [SessionEntity] {
@@ -32,16 +29,40 @@ final class HistoryState {
             result = result.filter { !$0.isInterrupted }
         }
 
-        // Применение сортировки
-        switch sortOrder {
-        case .byDateDescending:
-            result = result.sorted(by: { $0.startTime > $1.startTime })
-        case .byDateAscending:
-            result = result.sorted(by: { $0.startTime < $1.startTime })
+        return result
+    }
+    
+    var groupedSessions: [(cycle: CycleEntity?, sessions: [SessionEntity])] {
+        Dictionary(grouping: visibleSessions, by: { $0.cycle })
+            .sorted { (lhs, rhs) in
+                (lhs.key?.startDate ?? .distantPast) > (rhs.key?.startDate ?? .distantPast)
+            }
+            .map { (key: CycleEntity?, value: [SessionEntity]) in
+                return (cycle: key, sessions: value)
+            }
+    }
+    
+    var groupedSessionsByDate: [(date: Date, cycles: [(cycle: CycleEntity?, sessions: [SessionEntity])])] {
+        let calendar = Calendar.current
+
+        let sessionsByDate = Dictionary(grouping: visibleSessions) { session in
+            calendar.startOfDay(for: session.startTime)
         }
+
+        let result: [(Date, [(CycleEntity?, [SessionEntity])])] = sessionsByDate.map { (date, sessions) in
+            let groupedByCycle = Dictionary(grouping: sessions, by: { $0.cycle })
+                .map { (cycle, sessions) in (cycle, sessions) }
+                .sorted { (lhs, rhs) in
+                    (lhs.0?.startDate ?? .distantPast) > (rhs.0?.startDate ?? .distantPast)
+                }
+
+            return (date, groupedByCycle)
+        }
+        .sorted { $0.0 > $1.0 }
 
         return result
     }
+
 
     var sessionCountSummary: String {
         "\(sessions.count) sessions — \(sessions.filter { !$0.isInterrupted }.count) full / \(sessions.filter { $0.isInterrupted }.count) interrupted"
@@ -79,20 +100,3 @@ extension SessionFilter: CustomPickerLabelRepresentable {
         }
     }
 }
-
-enum SortOrder: String, CaseIterable, Identifiable {
-    case byDateDescending
-    case byDateAscending
-
-    var id: String { rawValue }
-}
-
-extension SortOrder: CustomPickerLabelRepresentable {
-    var label: String {
-        switch self {
-        case .byDateDescending: return "Newest"
-        case .byDateAscending: return "Oldest"
-        }
-    }
-}
-
