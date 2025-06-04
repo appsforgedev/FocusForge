@@ -23,10 +23,10 @@ struct TimerView: View {
                 if let title = timerState.nextSessionTitle {
                     HStack {
                         Text(Image(systemName: "arrow.forward.circle.dotted"))
-                            .font(.forgeButton)
+                            .font(.forgeSecond)
                             .foregroundColor(.gray.opacity(0.7))
                         Text("\(title)")
-                            .font(.forgeButton)
+                            .font(.forgeSecond)
                             .foregroundColor(.gray.opacity(0.7))
                     }
                     .padding(.vertical, 4)

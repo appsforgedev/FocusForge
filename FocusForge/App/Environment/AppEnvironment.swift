@@ -34,7 +34,7 @@ extension AppEnvironment {
         let settingsStore = SettingsStore()
         let audioManager = AudioManager(settingsStore: settingsStore)
         let dataManager = DataManager(modelContext: context)
-        let windowManager = WindowManager(modelContext: context)
+        let windowManager = WindowManager(dataManager: dataManager)
         
         return .init(
             settingsStore: settingsStore,
@@ -48,8 +48,8 @@ extension AppEnvironment {
         let settingsStore = SettingsStore()
         
         let audioManager = AudioManager(settingsStore: settingsStore)
-        let windowManager = WindowManager(modelContext: .preview)
         let dataManager = DataManager(modelContext: .preview)
+        let windowManager = WindowManager(dataManager: dataManager)
         
         return .init(
             settingsStore: settingsStore,

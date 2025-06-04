@@ -13,7 +13,7 @@ struct ForgeButtonStyles {
     struct Primary: ButtonStyle {
         func makeBody(configuration: Configuration) -> some View {
             configuration.label
-                .font(.forgeButton)
+                .font(.forgeSecond)
                 .foregroundColor(Color.buttonPrimaryText)
                 .padding(.horizontal, 24)
                 .padding(.vertical, 10)
@@ -33,7 +33,7 @@ struct ForgeButtonStyles {
     struct Secondary: ButtonStyle {
         func makeBody(configuration: Configuration) -> some View {
             configuration.label
-                .font(.forgeButton)
+                .font(.forgeSecond)
                 .foregroundColor(.textPrimary)
                 .padding(.horizontal, 16)
                 .padding(.vertical, 6)
@@ -53,7 +53,7 @@ struct ForgeButtonStyles {
     struct Minimal: ButtonStyle {
         func makeBody(configuration: Configuration) -> some View {
             configuration.label
-                .font(.forgeButton)
+                .font(.forgeSecond)
                 .foregroundColor(Color.textPrimary)
                 .frame(minWidth: 75, maxWidth: 85, minHeight: 14)
                 .padding(6)

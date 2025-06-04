@@ -19,9 +19,14 @@ extension Font {
         .custom("Inter-Regular", size: 13)
     }
     
-    // Кнопки
-    static var forgeButton: Font {
+    // Second
+    static var forgeSecond: Font {
         .custom("Inter-Regular", size: 12)
+    }
+    
+    // Small
+    static var forgeSmall: Font {
+        .custom("Inter-Regular", size: 10)
     }
 
     // Цифровой таймер

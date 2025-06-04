@@ -43,7 +43,7 @@ struct MainView: View {
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(
-            RoundedRectangle(cornerRadius: 24)
+            RoundedRectangle(cornerRadius: 16)
                 .fill(Color.backgroundColor)
                 .shadow(color: .black.opacity(0.45), radius: 5, x: 5, y: 5)
         )
@@ -108,7 +108,7 @@ struct MainView: View {
                 EmptyView()
             }
         }
-        .clipShape(RoundedRectangle(cornerRadius: 20))
+        .clipShape(RoundedRectangle(cornerRadius: 16))
     }
 }
 

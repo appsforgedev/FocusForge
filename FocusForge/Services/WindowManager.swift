@@ -14,10 +14,9 @@ final class WindowManager {
     private var alertWindow: NSWindow?
     
     internal init(
-        modelContext: ModelContext
+        dataManager: DataManager
     ) {
-        
-        self.historyWindow = makeHistoryWindow(modelContext: modelContext)
+        self.historyWindow = makeHistoryWindow(context: dataManager.modelContext)
     }
     
     func toggleHistory() {
@@ -72,18 +71,19 @@ final class WindowManager {
     }
 
     
-    private func makeHistoryWindow(modelContext: ModelContext) -> NSWindow {
-        let historyView = HistoryView().modelContext(modelContext)
+    private func makeHistoryWindow(context: ModelContext) -> NSWindow {
+        let historyView = HistoryViewDataContainer().modelContext(context)
         let hosting = NSHostingController(rootView: historyView)
-        
+
         let window = NSWindow(
-            contentRect: NSRect(x: 0, y: 0, width: 800, height: 800),
+            contentRect: NSRect(x: 0, y: 0, width: 940, height: 550),
             styleMask: [.titled, .closable, .resizable],
             backing: .buffered,
             defer: false
         )
         window.contentView = hosting.view
-        
+        window.backgroundColor = .background
+
         return window
     }
 }

@@ -26,3 +26,18 @@ final class SessionEntity {
         self.cycle = cycle
     }
 }
+
+extension SessionEntity {
+    var durationInMinutes: Int {
+        Int(endTime.timeIntervalSince(startTime) / 60)
+    }
+
+    var sessionDate: Date {
+        Calendar.current.startOfDay(for: startTime)
+    }
+
+    var sessionWeek: Date {
+        Calendar.current.dateInterval(of: .weekOfYear, for: startTime)?.start ?? sessionDate
+    }
+}
+
