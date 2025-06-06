@@ -71,7 +71,7 @@ struct ForgeButtonStyles {
         
         func makeBody(configuration: Configuration) -> some View {
             configuration.label
-                .font(.subheadline)
+                .font(.forgeBody)
                 .frame(width: 24, height: 24)
                 .foregroundStyle(isEnabled ? .buttonPrimaryText : .gray)
                 .background(
@@ -83,6 +83,25 @@ struct ForgeButtonStyles {
                         )
                 )
                 .opacity(configuration.isPressed ? 0.6 : 1.0)
+        }
+    }
+    
+    struct TimerControlButtonStyle: ButtonStyle {
+        var tintColor: Color = .accent
+        var isProminent: Bool = false
+
+        func makeBody(configuration: Configuration) -> some View {
+            configuration.label
+                .font(.system(size: 24, weight: .semibold))
+                .foregroundColor(tintColor)
+                .frame(width: 48, height: 48)
+                .contentShape(Circle())
+                .background(
+                    Circle()
+                        .fill(isProminent ? tintColor.opacity(0.15) : .clear)
+                        .scaleEffect(configuration.isPressed ? 0.95 : 1)
+                )
+                .animation(.spring(response: 0.3, dampingFraction: 0.7), value: configuration.isPressed)
         }
     }
 }

@@ -37,15 +37,15 @@ struct TimerView: View {
             .transition(.asymmetric(insertion: .move(edge: .trailing), removal: .move(edge: .leading)))
             .animation(.easeInOut(duration: 0.3), value: timerState.currentSession.title)
             
-            if timerState.isRunning {
-                ZStack {
-                    ForgeProgressBar(
-                        progress: progress,
-                        color: progressColor(for: timerState.currentSession)
-                    )
-                    .padding(.vertical, 4)
-                }
+            ZStack {
+                ForgeProgressBar(
+                    progress: progress,
+                    color: progressColor(for: timerState.currentSession)
+                )
+                .opacity(timerState.isRunning ? 1 : 0)
             }
+            .frame(height: 6)
+            .padding(.vertical, 4)
             
             Text(formattedTime)
                 .foregroundStyle(Color.textPrimary)
@@ -55,45 +55,59 @@ struct TimerView: View {
                 .padding(.top, 8)
                 .padding(.bottom, 12)
             
-            Group {
-                switch timerState.status {
-                case .idle:
-                    Button("Start") {
+            ButtonContainer
+            Spacer()
+        }
+    }
+    
+    var ButtonContainer: some View {
+        HStack {
+            switch timerState.status {
+            case .idle:
+                TimerButton.play {
+                    withAnimation {
+                        timerState.start()
+                    }
+                }
+            case .running:
+                HStack {
+                    TimerButton.reset {
                         withAnimation {
-                            timerState.start()
+                            timerState.finalize()
                         }
                     }
-                    .buttonStyle(ForgeButtonStyles.Primary())
-                case .running:
-                    VStack {
-                        Button("Pause") {
-                            withAnimation {
-                                timerState.pause()
-                            }
+                    TimerButton.pause {
+                        withAnimation {
+                            timerState.pause()
                         }
-                        .buttonStyle(ForgeButtonStyles.Primary())
-                        Button("Reset") {
-                            withAnimation {
-                                timerState.finalize()
-                            }
-                        }
-                        .buttonStyle(ForgeButtonStyles.Secondary())
                     }
-                case .paused(let remaining):
-                    Button("Continue") {
+                    TimerButton.skip {
+                        print("Skip")
+                    }
+                }
+            case .paused(let remaining):
+                HStack {
+                    TimerButton.reset {
+                        withAnimation {
+                            timerState.finalize()
+                        }
+                    }
+                    TimerButton.play {
                         withAnimation {
                             timerState.start(from: remaining)
                         }
                     }
-                    .buttonStyle(ForgeButtonStyles.Primary())
+                    TimerButton.skip {
+                        print("Skip")
+                    }
                 }
             }
-            .transition(.opacity)
-            .animation(.easeInOut(duration: 0.25), value: timerState.status)
-            Spacer()
         }
+        .transition(.opacity)
+        .animation(.easeInOut(duration: 0.25), value: timerState.status)
     }
 }
+
 
 extension TimerView {
     private var formattedTime: String {
