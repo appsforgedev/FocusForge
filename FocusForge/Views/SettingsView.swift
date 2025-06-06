@@ -23,10 +23,6 @@ struct SettingsView: View {
             }
         } else {
             VStack(spacing: 5) {
-                Text("Settings")
-                    .font(.forgeTitle)
-                    .foregroundStyle(Color.textPrimary)
-                    .padding(4)
                 CounterView(
                     text: "Focus:",
                     step: 5,

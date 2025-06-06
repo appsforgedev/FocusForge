@@ -14,30 +14,72 @@ struct MainView: View {
 //    @Environment(\.openWindow) private var openWindow
     
     var body: some View {
-        ZStack(alignment: .topTrailing) {
+        ZStack {
             VStack {
                 switch appState.currentScreen {
                 case .timer:
                     Spacer()
                     TimerView(timerState: appState.timerState)
                     Spacer()
-                    Button("Settings") {
+                    Button {
                         appState.env.audioManager.play(.click)
-                        appState.showSettings()
+                        appState.env.windowManager.toggleHistory()
+                    } label: {
+                        Text("History")
                     }
                     .buttonStyle(ForgeButtonStyles.Minimal())
-                    .padding(.bottom)
+                    .padding(.bottom, 8)
+
                 case .settings:
                     Spacer()
-                    SettingsView(timerIsRunning: appState.timerState.isRunning)
-                        .environment(appState.env)
-                    Spacer()
-                    Button("Back") {
-                        appState.env.audioManager.play(.click)
-                        appState.showTimer()
+                    VStack(alignment: .center) {
+                        HStack {
+                            BackButton
+                            Text("Settings")
+                                .font(.forgeTitle)
+                                .foregroundStyle(Color.textPrimary)
+                            Spacer()
+                        }
+                        .padding(.top, 8)
+                        .padding(.leading, 16)
+                        Spacer()
+                        SettingsView(timerIsRunning: appState.timerState.isRunning)
+                            .environment(appState.env)
+                        Spacer()
                     }
-                    .buttonStyle(ForgeButtonStyles.Minimal())
-                    .padding(.bottom)
+                    Spacer()
+                }
+            }
+            // Кнопка закрытия — в левом верхнем углу
+            if appState.currentScreen == .timer {
+                VStack {
+                    HStack {
+                        CloseButton
+                            .padding()
+                        Spacer()
+                    }
+                    Spacer()
+                }
+
+                // Кнопка настроек — в правом нижнем углу
+                VStack {
+                    Spacer()
+                    HStack {
+                        Spacer()
+                        SettingsButton
+                            .padding()
+                    }
+                }
+                
+                VStack {
+                    Spacer()
+                    HStack {
+                        SoundButton(
+                            isOn: appState.env.settingsStore.binding(for: \.isSoundEnabled)
+                        )
+                        .padding()
+                        Spacer()
+                    }
                 }
             }
         }
@@ -47,41 +89,12 @@ struct MainView: View {
                 .fill(Color.backgroundColor)
                 .shadow(color: .black.opacity(0.45), radius: 5, x: 5, y: 5)
         )
-        .overlay(alignment: .topTrailing) {
+        .clipShape(RoundedRectangle(cornerRadius: 16))
+        .debugOverlay {
             switch appState.currentScreen {
             case .timer:
                 VStack(spacing: 8) {
                     Spacer()
-                    ToggleButton(
-                        systemImageOn: "speaker.square",
-                        systemImageOff: "speaker.square.fill",
-                        isOn: appState.env.settingsStore.binding(for: \.isSoundEnabled)
-                    )
-                    
-                    Button {
-                        appState.env.audioManager.play(.click)
-                        appState.env.windowManager.toggleHistory()
-                    } label: {
-                        Image(systemName: "h.square")
-                            .font(.system(size: 28))
-                            .foregroundStyle(Color.buttonSecondary)
-                    }
-                    
-                    Button {
-                        appState.env.windowManager.showAlert(
-                            message: "Exit?",
-                            buttonTitle: "Ok",
-                            onConfirm: {
-                                appState.terminateApplication()
-                            }) {
-                                print("On cancel")
-                            }
-                    } label: {
-                        Image(systemName: "xmark.square")
-                            .font(.system(size: 28))
-                            .foregroundStyle(Color.buttonSecondary)
-                    }
-                    #if DEBUG
                     Group {
                         Button {
                             appState.timerState.forceTimer()
@@ -98,8 +111,7 @@ struct MainView: View {
                                 .foregroundStyle(Color.buttonSecondary)
                         }
                     }
-                    .background(.brown)
-                    #endif
+                    .border(.red)
                     Spacer()
                 }
                 .buttonStyle(.plain)
@@ -108,24 +120,77 @@ struct MainView: View {
                 EmptyView()
             }
         }
-        .clipShape(RoundedRectangle(cornerRadius: 16))
+    }
+    
+    var BackButton: some View {
+        Button {
+            appState.env.audioManager.play(.click)
+            appState.showTimer()
+        } label: {
+            Image(systemName: "chevron.left")
+                .font(.system(size: 20))
+                .foregroundStyle(.textPrimary.opacity(0.8))
+                .frame(width: 28, height: 28)
+                .contentShape(Rectangle())
+        }
+        .buttonStyle(.plain)
+    }
+    
+    var CloseButton: some View {
+        Button {
+            appState.env.windowManager.showAlert(
+                message: "Exit?",
+                buttonTitle: "Ok",
+                onConfirm: {
+                    appState.terminateApplication()
+                }) {
+                    print("On cancel")
+                }
+        } label: {
+            Image(systemName: "xmark")
+                .font(.system(size: 20))
+                .foregroundStyle(.textPrimary.opacity(0.7))
+                .frame(width: 32, height: 32)
+                .contentShape(Rectangle())
+        }
+        .buttonStyle(.plain)
+    }
+    
+    var SettingsButton: some View {
+        Button {
+            appState.env.audioManager.play(.click)
+            appState.showSettings()
+        } label: {
+            Image(systemName: "gearshape")
+                .font(.system(size: 20))
+                .foregroundStyle(.textPrimary.opacity(0.7))
+                .frame(width: 32, height: 32)
+                .contentShape(Rectangle())
+        }
+        .buttonStyle(.plain)
     }
 }
 
-struct ToggleButton: View {
-    let systemImageOn: String
-    let systemImageOff: String
+struct SoundButton: View {
     @Binding var isOn: Bool
 
     var body: some View {
         Button {
             isOn.toggle()
         } label: {
-            Image(
-                systemName: isOn ? systemImageOn : systemImageOff
-            )
-            .foregroundStyle(isOn ? Color.buttonSecondary : .accentSecondary)
-            .font(.system(size: 28))
+            ZStack {
+                Image(systemName: "speaker.wave.2.fill")
+                    .font(.system(size: 20))
+                    .foregroundStyle(.textPrimary.opacity(0.7))
+                if !isOn {
+                    Capsule()
+                        .foregroundStyle(.textPrimary)
+                        .frame(width: 28, height: 3)
+                        .rotationEffect(.degrees(-45))
+                        .offset(x: 0, y: 0)
+                }
+            }
+            .frame(width: 32, height: 32)
         }
         .buttonStyle(.plain)
         .contentShape(Rectangle())
