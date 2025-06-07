@@ -164,7 +164,7 @@ struct SessionDetailView: View {
                 Text("Details:")
                 Text("Started: \(session.startTime.formatted(date: .long, time: .complete))")
                 Text("Ended: \(session.endTime.formatted(date: .long, time: .complete))")
-                Text("Duration: \(formatedTime(session.durationInSeconds))")
+                Text("Duration: \(session.durationInSeconds.formatedToTime)")
                 Text("Interrupted: \(session.isInterrupted ? "Yes" : "No")")
                 Text("Is Skipped: \(session.isSkipped ? "Yes" : "No")")
             }
@@ -179,12 +179,6 @@ struct SessionDetailView: View {
         }
         .padding()
     }
-    
-    func formatedTime(_ totalSeconds: Int) -> String {
-        let minutes = totalSeconds / 60
-        let seconds = totalSeconds % 60
-        return String(format: "%02d:%02d", minutes, seconds)
-    }
 }
 
 struct DashboardView: View {
@@ -196,10 +190,10 @@ struct DashboardView: View {
                 .font(.forgeTitle)
                 .foregroundStyle(.textPrimary)
             Spacer()
-            WeekdayChartView(state: state)
+           
+            RadarChartView(sessions: state.sessions)
+//            WeekdayChartView(state: state)
 //            HexagramChartView(sessions: state.sessions)
-            Text(selectedSession?.symbol ?? "?")
-                .foregroundStyle(.textPrimary)
             Spacer()
             
             Text(state.sessionCountSummary)

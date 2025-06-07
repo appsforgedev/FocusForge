@@ -63,9 +63,19 @@ final class HistoryState {
         return result
     }
 
+    var weekDayAggregates: [(String, Int)] {
+        var aggregates: [(String, Int)] = Array(repeating: ("", 0), count: 7)
+        
+        for session in visibleSessions {
+            let index = Calendar.current.component(.weekday, from: session.startTime) - 1
+            aggregates[index].1 += 1
+        }
+        
+        return aggregates
+    }
 
     var sessionCountSummary: String {
-        "\(sessions.count) sessions — \(sessions.filter { !$0.isInterrupted }.count) full / \(sessions.filter { $0.isInterrupted }.count) interrupted"
+        "\(sessions.count) sessions — \(sessions.filter { !$0.isInterrupted }.count) full / \(sessions.filter { $0.isInterrupted }.count) interrupted / \(sessions.filter { $0.isSkipped }.count) skipped"
     }
 
     init(cycles: [CycleEntity], sessions: [SessionEntity]) {
