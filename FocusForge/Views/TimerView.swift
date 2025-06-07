@@ -82,7 +82,9 @@ struct TimerView: View {
                         }
                     }
                     TimerButton.skip {
-                        print("Skip")
+                        withAnimation {
+                            timerState.skip()
+                        }
                     }
                 }
             case .paused(let remaining):
@@ -98,7 +100,9 @@ struct TimerView: View {
                         }
                     }
                     TimerButton.skip {
-                        print("Skip")
+                        withAnimation {
+                            timerState.skip()
+                        }
                     }
                 }
             }

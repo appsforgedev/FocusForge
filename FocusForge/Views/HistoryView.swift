@@ -163,7 +163,10 @@ struct SessionDetailView: View {
             VStack(alignment: .leading) {
                 Text("Details:")
                 Text("Started: \(session.startTime.formatted(date: .long, time: .complete))")
+                Text("Ended: \(session.endTime.formatted(date: .long, time: .complete))")
+                Text("Duration: \(formatedTime(session.durationInSeconds))")
                 Text("Interrupted: \(session.isInterrupted ? "Yes" : "No")")
+                Text("Is Skipped: \(session.isSkipped ? "Yes" : "No")")
             }
             .foregroundStyle(.textPrimary)
             .padding()
@@ -175,6 +178,12 @@ struct SessionDetailView: View {
             .padding()
         }
         .padding()
+    }
+    
+    func formatedTime(_ totalSeconds: Int) -> String {
+        let minutes = totalSeconds / 60
+        let seconds = totalSeconds % 60
+        return String(format: "%02d:%02d", minutes, seconds)
     }
 }
 
@@ -188,6 +197,7 @@ struct DashboardView: View {
                 .foregroundStyle(.textPrimary)
             Spacer()
             WeekdayChartView(state: state)
+//            HexagramChartView(sessions: state.sessions)
             Text(selectedSession?.symbol ?? "?")
                 .foregroundStyle(.textPrimary)
             Spacer()
@@ -198,14 +208,6 @@ struct DashboardView: View {
                 .padding(.top, 4)
         }
         .padding()
-    }
-}
-
-struct EmptyDetailView: View {
-    
-    var body: some View {
-        Text("Choose a session in the list")
-            .foregroundStyle(.textPrimary)
     }
 }
 

@@ -130,6 +130,11 @@ final class TimerState {
         completedFocusSessions = 0
         nextSession = nil
     }
+    
+    func skip() {
+        environment.audioManager.play(.endLongBreak)
+        handleSessionCompletion(isSkipped: true)
+    }
 
     private func stopTimer() {
         timerTask?.cancel()
@@ -138,14 +143,15 @@ final class TimerState {
 
     // MARK: - Session Completion
 
-    private func handleSessionCompletion() {
+    private func handleSessionCompletion(isSkipped: Bool = false) {
         guard let sessionStartDate else {
             print("⚠️ Session is not started yet")
             return
         }
         recordSession(
             startTime: sessionStartDate,
-            currentSession: currentSession
+            currentSession: currentSession,
+            isSkipped: isSkipped
         )
     
         self.sessionStartDate = nil
@@ -179,18 +185,6 @@ final class TimerState {
         start(from: timeRemaining)
     }
     
-    func interruptSession() {
-        guard let sessionStartDate else { return }
-        
-        recordSession(
-            startTime: sessionStartDate,
-            currentSession: currentSession,
-            isInterrupted: true
-        )
-        
-        self.sessionStartDate = nil
-    }
-    
     func forceFinalizeSession() {
         guard isRunning, let sessionStartDate else { return }
 
@@ -206,13 +200,15 @@ final class TimerState {
     private func recordSession(
         startTime: Date,
         currentSession: PomodoroSession,
-        isInterrupted: Bool = false
+        isInterrupted: Bool = false,
+        isSkipped: Bool = false
     ) {
         environment.dataManager.recordSession(
             type: currentSession,
             start: startTime,
             end: Date(),
-            interrupted: isInterrupted
+            isInterrupted: isInterrupted,
+            isSkipped: isSkipped
         )
     }
 

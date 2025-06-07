@@ -32,7 +32,8 @@ final class DataManager {
         type: PomodoroSession,
         start: Date,
         end: Date,
-        interrupted: Bool = false
+        isInterrupted: Bool = false,
+        isSkipped: Bool = false
     ) {
         let context = modelContext
 
@@ -45,7 +46,8 @@ final class DataManager {
             type: type.rawValue,
             startTime: start,
             endTime: end,
-            isInterrupted: interrupted,
+            isInterrupted: isInterrupted,
+            isSkipped: isSkipped,
             cycle: activeCycle
         )
         
